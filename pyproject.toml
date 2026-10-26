@@ -21,7 +21,7 @@ dependencies = [
     "scipy>=1.14",
     # Configuration & env
     "pydantic>=2.10",
-    "pydantic-settings>=2.7",
+    "pydantic-settings>=2.14.2",
     "pyyaml>=6.0",
     # Terminal dashboard
     "textual>=1.0",
