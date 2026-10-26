@@ -1,0 +1,516 @@
+{
+  "spec": "docs/superpowers/specs/2026-06-10-asos-continuous-gap-design.md",
+  "cli_days_loaded": 668,
+  "decomposition_caveat": "Per-city verdicts are independent; GREEN_cities lists only cities that individually cleared the gate. h1min lever split is a bound (see per-city).",
+  "GREEN_cities": [
+    "NYC",
+    "CHI",
+    "LAX",
+    "MIA"
+  ],
+  "economic_gate_upper_bound": {
+    "note": "bracket_prob_shift raising runtime M by mean(G) -- an UPPER bound; the real fix lowers climatology mu_gain by ~mean(G). Confirms a mean-G correction moves near-boundary bracket probabilities materially.",
+    "by_city": {
+      "NYC": [
+        {
+          "setup": "ABOVE floor=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.765,
+          "base": 0.318,
+          "corrected": 0.823,
+          "delta": 0.505
+        },
+        {
+          "setup": "BETWEEN 88-89, M=88.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.765,
+          "base": 0.682,
+          "corrected": 0.177,
+          "delta": -0.505
+        },
+        {
+          "setup": "BELOW cap=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.765,
+          "base": 0.0,
+          "corrected": 0.0,
+          "delta": 0.0
+        }
+      ],
+      "CHI": [
+        {
+          "setup": "ABOVE floor=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.738,
+          "base": 0.318,
+          "corrected": 0.802,
+          "delta": 0.484
+        },
+        {
+          "setup": "BETWEEN 88-89, M=88.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.738,
+          "base": 0.682,
+          "corrected": 0.198,
+          "delta": -0.484
+        },
+        {
+          "setup": "BELOW cap=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.738,
+          "base": 0.0,
+          "corrected": 0.0,
+          "delta": 0.0
+        }
+      ],
+      "LAX": [
+        {
+          "setup": "ABOVE floor=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.929,
+          "base": 0.318,
+          "corrected": 0.948,
+          "delta": 0.63
+        },
+        {
+          "setup": "BETWEEN 88-89, M=88.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.929,
+          "base": 0.682,
+          "corrected": 0.052,
+          "delta": -0.63
+        },
+        {
+          "setup": "BELOW cap=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.929,
+          "base": 0.0,
+          "corrected": 0.0,
+          "delta": 0.0
+        }
+      ],
+      "MIA": [
+        {
+          "setup": "ABOVE floor=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.951,
+          "base": 0.318,
+          "corrected": 0.964,
+          "delta": 0.646
+        },
+        {
+          "setup": "BETWEEN 88-89, M=88.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.951,
+          "base": 0.682,
+          "corrected": 0.036,
+          "delta": -0.646
+        },
+        {
+          "setup": "BELOW cap=90, M=89.5",
+          "mu_gain": 0.25,
+          "sigma_gain": 0.8,
+          "nu": 5.0,
+          "m_correction": 0.951,
+          "base": 0.0,
+          "corrected": 0.0,
+          "delta": 0.0
+        }
+      ]
+    }
+  },
+  "cities": [
+    {
+      "city": "NYC",
+      "has_1min": true,
+      "n_cli_days": 81,
+      "G_value_counts_intF": {
+        "0": 29,
+        "1": 42,
+        "2": 10
+      },
+      "coverage": {
+        "n_1min_rows": 822947,
+        "n_1min_days": 676,
+        "n_hourly_days": 771,
+        "n_overlap_days": 43,
+        "note": "Sparse 1-min coverage (low n_1min_days vs n_hourly_days) inflates the 1-min-derived stats and can drive leverA negative / PROXY_INVALID."
+      },
+      "G_settlement_bias": {
+        "n": 81,
+        "mean": 0.765,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.653
+      },
+      "G_clear_days_top_tercile": {
+        "n": 29,
+        "mean": 0.828,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.647
+      },
+      "decomposition": {
+        "between_sample_leverA_2yr": {
+          "n": 676,
+          "mean": 0.984,
+          "median": 1.0,
+          "p95": 4.0,
+          "stdev": 2.936
+        },
+        "between_sample_leverA_overlap": {
+          "n": 43,
+          "mean": 0.767,
+          "median": 1.0,
+          "p95": 3.0,
+          "stdev": 2.1
+        },
+        "quant_residual_leverB_overlap": {
+          "n": 43,
+          "mean": 0.14,
+          "median": 0.0,
+          "p95": 6.0,
+          "stdev": 1.972
+        },
+        "G_overlap_for_identity": {
+          "n": 43,
+          "mean": 0.907,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 0.676
+        },
+        "caveat": "Additive identity holds on the OVERLAP cut: mean(between_sample_leverA_overlap) + mean(quant_residual_leverB_overlap) == mean(G_overlap_for_identity) (NOT G_settlement_bias, which spans the larger all-CLI-days sample; the _2yr leverA is a different, larger day-sample and will NOT add up). Critically, the raw 1-min max can OVERSHOOT the official 5-min-averaged CLI high, so leverB (CLI - h1min) goes negative for some cells -- h1min is NOT bounded by settlement. The clean 'leverA recoverable / leverB irreducible floor' framing therefore does NOT hold; a faster real-time feed could read ABOVE the settlement value. Treat the headline G (CLI - hourly max), which is independent of 1-min, as the robust result."
+      },
+      "cli_validation": {
+        "q_residual_cli_minus_h1min": {
+          "n": 43,
+          "mean": 0.14,
+          "median": 0.0,
+          "p95": 6.0,
+          "stdev": 1.972
+        },
+        "proxy_valid": true
+      },
+      "verdict": "GREEN"
+    },
+    {
+      "city": "CHI",
+      "has_1min": true,
+      "n_cli_days": 84,
+      "G_value_counts_intF": {
+        "-1": 1,
+        "0": 33,
+        "1": 44,
+        "2": 4,
+        "4": 1,
+        "7": 1
+      },
+      "coverage": {
+        "n_1min_rows": 776682,
+        "n_1min_days": 611,
+        "n_hourly_days": 771,
+        "n_overlap_days": 44,
+        "note": "Sparse 1-min coverage (low n_1min_days vs n_hourly_days) inflates the 1-min-derived stats and can drive leverA negative / PROXY_INVALID."
+      },
+      "G_settlement_bias": {
+        "n": 84,
+        "mean": 0.738,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.977
+      },
+      "G_clear_days_top_tercile": {
+        "n": 32,
+        "mean": 0.562,
+        "median": 1.0,
+        "p95": 1.0,
+        "stdev": 0.556
+      },
+      "decomposition": {
+        "between_sample_leverA_2yr": {
+          "n": 611,
+          "mean": 0.538,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 2.072
+        },
+        "between_sample_leverA_overlap": {
+          "n": 44,
+          "mean": 0.977,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 1.076
+        },
+        "quant_residual_leverB_overlap": {
+          "n": 44,
+          "mean": -0.318,
+          "median": 0.0,
+          "p95": 0.0,
+          "stdev": 0.512
+        },
+        "G_overlap_for_identity": {
+          "n": 44,
+          "mean": 0.659,
+          "median": 0.5,
+          "p95": 2.0,
+          "stdev": 1.147
+        },
+        "caveat": "Additive identity holds on the OVERLAP cut: mean(between_sample_leverA_overlap) + mean(quant_residual_leverB_overlap) == mean(G_overlap_for_identity) (NOT G_settlement_bias, which spans the larger all-CLI-days sample; the _2yr leverA is a different, larger day-sample and will NOT add up). Critically, the raw 1-min max can OVERSHOOT the official 5-min-averaged CLI high, so leverB (CLI - h1min) goes negative for some cells -- h1min is NOT bounded by settlement. The clean 'leverA recoverable / leverB irreducible floor' framing therefore does NOT hold; a faster real-time feed could read ABOVE the settlement value. Treat the headline G (CLI - hourly max), which is independent of 1-min, as the robust result."
+      },
+      "cli_validation": {
+        "q_residual_cli_minus_h1min": {
+          "n": 44,
+          "mean": -0.318,
+          "median": 0.0,
+          "p95": 0.0,
+          "stdev": 0.512
+        },
+        "proxy_valid": true
+      },
+      "verdict": "GREEN"
+    },
+    {
+      "city": "LAX",
+      "has_1min": true,
+      "n_cli_days": 84,
+      "G_value_counts_intF": {
+        "0": 23,
+        "1": 46,
+        "2": 13,
+        "3": 2
+      },
+      "coverage": {
+        "n_1min_rows": 764350,
+        "n_1min_days": 643,
+        "n_hourly_days": 771,
+        "n_overlap_days": 40,
+        "note": "Sparse 1-min coverage (low n_1min_days vs n_hourly_days) inflates the 1-min-derived stats and can drive leverA negative / PROXY_INVALID."
+      },
+      "G_settlement_bias": {
+        "n": 84,
+        "mean": 0.929,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.72
+      },
+      "G_clear_days_top_tercile": {
+        "n": 31,
+        "mean": 1.065,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.801
+      },
+      "decomposition": {
+        "between_sample_leverA_2yr": {
+          "n": 643,
+          "mean": 1.149,
+          "median": 1.0,
+          "p95": 3.0,
+          "stdev": 4.827
+        },
+        "between_sample_leverA_overlap": {
+          "n": 40,
+          "mean": 0.8,
+          "median": 1.0,
+          "p95": 3.0,
+          "stdev": 2.951
+        },
+        "quant_residual_leverB_overlap": {
+          "n": 40,
+          "mean": 0.25,
+          "median": -1.0,
+          "p95": 8.0,
+          "stdev": 2.817
+        },
+        "G_overlap_for_identity": {
+          "n": 40,
+          "mean": 1.05,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 0.805
+        },
+        "caveat": "Additive identity holds on the OVERLAP cut: mean(between_sample_leverA_overlap) + mean(quant_residual_leverB_overlap) == mean(G_overlap_for_identity) (NOT G_settlement_bias, which spans the larger all-CLI-days sample; the _2yr leverA is a different, larger day-sample and will NOT add up). Critically, the raw 1-min max can OVERSHOOT the official 5-min-averaged CLI high, so leverB (CLI - h1min) goes negative for some cells -- h1min is NOT bounded by settlement. The clean 'leverA recoverable / leverB irreducible floor' framing therefore does NOT hold; a faster real-time feed could read ABOVE the settlement value. Treat the headline G (CLI - hourly max), which is independent of 1-min, as the robust result."
+      },
+      "cli_validation": {
+        "q_residual_cli_minus_h1min": {
+          "n": 40,
+          "mean": 0.25,
+          "median": -1.0,
+          "p95": 8.0,
+          "stdev": 2.817
+        },
+        "proxy_valid": true
+      },
+      "verdict": "GREEN"
+    },
+    {
+      "city": "MIA",
+      "has_1min": true,
+      "n_cli_days": 81,
+      "G_value_counts_intF": {
+        "0": 21,
+        "1": 43,
+        "2": 17
+      },
+      "coverage": {
+        "n_1min_rows": 864623,
+        "n_1min_days": 678,
+        "n_hourly_days": 771,
+        "n_overlap_days": 32,
+        "note": "Sparse 1-min coverage (low n_1min_days vs n_hourly_days) inflates the 1-min-derived stats and can drive leverA negative / PROXY_INVALID."
+      },
+      "G_settlement_bias": {
+        "n": 81,
+        "mean": 0.951,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.683
+      },
+      "G_clear_days_top_tercile": {
+        "n": 30,
+        "mean": 0.733,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.772
+      },
+      "decomposition": {
+        "between_sample_leverA_2yr": {
+          "n": 678,
+          "mean": 1.389,
+          "median": 2.0,
+          "p95": 3.0,
+          "stdev": 2.126
+        },
+        "between_sample_leverA_overlap": {
+          "n": 32,
+          "mean": 1.969,
+          "median": 2.0,
+          "p95": 4.0,
+          "stdev": 1.159
+        },
+        "quant_residual_leverB_overlap": {
+          "n": 32,
+          "mean": -0.875,
+          "median": -1.0,
+          "p95": 1.0,
+          "stdev": 1.139
+        },
+        "G_overlap_for_identity": {
+          "n": 32,
+          "mean": 1.094,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 0.678
+        },
+        "caveat": "Additive identity holds on the OVERLAP cut: mean(between_sample_leverA_overlap) + mean(quant_residual_leverB_overlap) == mean(G_overlap_for_identity) (NOT G_settlement_bias, which spans the larger all-CLI-days sample; the _2yr leverA is a different, larger day-sample and will NOT add up). Critically, the raw 1-min max can OVERSHOOT the official 5-min-averaged CLI high, so leverB (CLI - h1min) goes negative for some cells -- h1min is NOT bounded by settlement. The clean 'leverA recoverable / leverB irreducible floor' framing therefore does NOT hold; a faster real-time feed could read ABOVE the settlement value. Treat the headline G (CLI - hourly max), which is independent of 1-min, as the robust result."
+      },
+      "cli_validation": {
+        "q_residual_cli_minus_h1min": {
+          "n": 32,
+          "mean": -0.875,
+          "median": -1.0,
+          "p95": 1.0,
+          "stdev": 1.139
+        },
+        "proxy_valid": true
+      },
+      "verdict": "GREEN"
+    },
+    {
+      "city": "AUS",
+      "has_1min": true,
+      "n_cli_days": 81,
+      "G_value_counts_intF": {
+        "0": 18,
+        "1": 49,
+        "2": 13,
+        "3": 1
+      },
+      "coverage": {
+        "n_1min_rows": 626080,
+        "n_1min_days": 624,
+        "n_hourly_days": 771,
+        "n_overlap_days": 20,
+        "note": "Sparse 1-min coverage (low n_1min_days vs n_hourly_days) inflates the 1-min-derived stats and can drive leverA negative / PROXY_INVALID."
+      },
+      "G_settlement_bias": {
+        "n": 81,
+        "mean": 0.963,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.656
+      },
+      "G_clear_days_top_tercile": {
+        "n": 35,
+        "mean": 0.886,
+        "median": 1.0,
+        "p95": 2.0,
+        "stdev": 0.574
+      },
+      "decomposition": {
+        "between_sample_leverA_2yr": {
+          "n": 624,
+          "mean": -1.53,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 6.066
+        },
+        "between_sample_leverA_overlap": {
+          "n": 20,
+          "mean": -1.0,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 5.745
+        },
+        "quant_residual_leverB_overlap": {
+          "n": 20,
+          "mean": 1.95,
+          "median": 0.0,
+          "p95": 18.0,
+          "stdev": 5.801
+        },
+        "G_overlap_for_identity": {
+          "n": 20,
+          "mean": 0.95,
+          "median": 1.0,
+          "p95": 2.0,
+          "stdev": 0.589
+        },
+        "caveat": "Additive identity holds on the OVERLAP cut: mean(between_sample_leverA_overlap) + mean(quant_residual_leverB_overlap) == mean(G_overlap_for_identity) (NOT G_settlement_bias, which spans the larger all-CLI-days sample; the _2yr leverA is a different, larger day-sample and will NOT add up). Critically, the raw 1-min max can OVERSHOOT the official 5-min-averaged CLI high, so leverB (CLI - h1min) goes negative for some cells -- h1min is NOT bounded by settlement. The clean 'leverA recoverable / leverB irreducible floor' framing therefore does NOT hold; a faster real-time feed could read ABOVE the settlement value. Treat the headline G (CLI - hourly max), which is independent of 1-min, as the robust result."
+      },
+      "cli_validation": {
+        "q_residual_cli_minus_h1min": {
+          "n": 20,
+          "mean": 1.95,
+          "median": 0.0,
+          "p95": 18.0,
+          "stdev": 5.801
+        },
+        "proxy_valid": false
+      },
+      "verdict": "PROXY_INVALID"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "city": "MIA",
+    "cli_location": "MIA",
+    "observation_date": "2026-05-09",
+    "high_f": 91,
+    "low_f": 75,
+    "product_id": "fixture-mia-2026-05-09-final",
+    "issued_at": "2026-05-10T08:22:00+00:00",
+    "is_preliminary": false,
+    "snapshot_ts": 1778445720.0
+  }
+]

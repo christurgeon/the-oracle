@@ -1,0 +1,30 @@
+[
+  {
+    "ticker": "KXHIGHMIA-26MAY08-T93",
+    "series_ticker": "KXHIGHMIA",
+    "city": "MIA",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "greater",
+    "floor_strike": 93.0,
+    "cap_strike": null,
+    "yes_bid_dollars": 0.23,
+    "yes_ask_dollars": 0.24,
+    "volume_fp": 615,
+    "expiration_ts": 1778335200,
+    "snapshot_ts": 1778170140.2083066
+  },
+  {
+    "ticker": "KXHIGHMIA-26MAY08-T86",
+    "series_ticker": "KXHIGHMIA",
+    "city": "MIA",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "less",
+    "floor_strike": null,
+    "cap_strike": 86.0,
+    "yes_bid_dollars": 0.0,
+    "yes_ask_dollars": 0.01,
+    "volume_fp": 1534,
+    "expiration_ts": 1778335200,
+    "snapshot_ts": 1778170140.2083066
+  }
+]

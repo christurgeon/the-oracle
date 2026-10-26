@@ -1,0 +1,32 @@
+[Unit]
+Description=Oracle daily trade report
+After=oracle-bot.service network-online.target
+Wants=network-online.target
+OnFailure=oracle-alert-failure@%N.service
+
+[Service]
+Type=oneshot
+User=oracle
+Group=oracle
+WorkingDirectory=/opt/oracle
+EnvironmentFile=/opt/oracle/.env
+
+ExecStartPre=/bin/mkdir -p /opt/oracle/state/reports/daily-report
+ExecStart=/opt/oracle/deploy/run-daily-report.sh
+ExecStartPost=/usr/bin/find /opt/oracle/state/reports/daily-report -type f -name "*.json" -mtime +90 -delete
+
+ProtectSystem=strict
+ReadWritePaths=/opt/oracle/state /opt/oracle/data
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+TimeoutStartSec=600
+MemoryMax=1G
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=oracle-daily-report

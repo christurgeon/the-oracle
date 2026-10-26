@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "doc": "Per-cell EMOS promotion overrides — cells that were promoted to live despite tripping the per-cell `ci_warnings == []` gate. The reviewer at each `re_evaluate_at` date should re-check the named warning against the latest refit and either lift the override (warning cleared) or roll back to excluded (warning still present and no Brier gain).",
+  "created_at": "2026-05-11T00:00:00Z",
+  "created_by_commit": "not recorded (pre-release history)",
+  "overrides": [
+    {
+      "cell": "LAX/high",
+      "warning_overridden": "unstable_d",
+      "rolled_back": true,
+      "rollback_date": "2026-05-18",
+      "rollback_reason": "Live BSS_emos_vs_iso=-4.0% (n=36 signals), 11 trades over 7 days, ROI -39.6%. EMOS sigma=6.8F at ens_std=2.5F is structurally incompatible with 1F Kalshi brackets; d=7.19 floods Kelly-capped sizing into the modal bracket which is also where the model misfires. Loss/win wager ratio 2.41x. Cell returned to excluded_city_vars. Re-evaluate at 2026-06-11 refit with bounded-d constraint (e.g. cap d at cell_ens_std_p99 / bracket_width).",
+      "warning_definition": "Bootstrap 95% CI width on the EMOS `d` (variance-slope) coefficient exceeds 4.0. Indicates the fit is uncertain about how strongly GFS ensemble spread predicts forecast uncertainty for this cell; point estimates of `a`, `b`, `c` are unaffected.",
+      "fit_artifact": {
+        "fit_date": "2026-05-11",
+        "commit": "a8d3853",
+        "n_train": 145,
+        "d_ci": [3.06, 11.12],
+        "d_point_estimate": 7.188,
+        "d_bootstrap_p50": 7.069
+      },
+      "cv_oos_brier": {
+        "emos": 0.1582,
+        "raw_gaussian": 0.2548,
+        "abs_improvement_pp": -9.66,
+        "rel_improvement_pct": -37.9
+      },
+      "justification": [
+        "memory/calibration_live_state.md (2026-05-04 re-evaluation): 'unblock when EMOS scope-B replaces isotonic on this cell' — isotonic plateau leakage was the structural blocker; EMOS is continuous and has no plateau pathology by construction.",
+        "Point estimates a/b/c are stable; only the σ²-slope d has wide CI.",
+        "Stage A precedent: MIA/high and NYC/low were promoted on the same per-cell rule with clean warnings; this override extends the precedent under documented uncertainty rather than waiting another month for d-CI to tighten."
+      ],
+      "rollback_trigger": "If at 2026-06-11 refit `unstable_d` persists AND CV-OOS Brier improvement falls below 5pp, remove LAX/high from emos_enabled_cells and add LAX_high back to excluded_city_vars.",
+      "re_evaluate_at": "2026-06-11"
+    },
+    {
+      "cell": "LAX/low",
+      "warning_overridden": "unstable_d",
+      "warning_definition": "Bootstrap 95% CI width on the EMOS `d` coefficient exceeds 4.0. LAX/low's d CI starts at 0.0, meaning the bootstrap touches the σ²-floor — interpret as 'spread-skill relationship may be weak or flat'; fit remains valid.",
+      "fit_artifact": {
+        "fit_date": "2026-05-11",
+        "commit": "a8d3853",
+        "n_train": 145,
+        "d_ci": [0.00, 5.51],
+        "d_point_estimate": 0.774,
+        "d_bootstrap_p50": 0.835
+      },
+      "cv_oos_brier": {
+        "emos": 0.1139,
+        "raw_gaussian": 0.3505,
+        "abs_improvement_pp": -23.66,
+        "rel_improvement_pct": -67.5
+      },
+      "justification": [
+        "memory/calibration_live_state.md (2026-05-04 re-evaluation): 'n=12 capped trades insufficient; sign flips across halves … Re-evaluate at n>=30 capped trades' — exclusion was a data-volume gate, not a structural verdict.",
+        "Largest CV-OOS Brier improvement of any cell in the 2026-05-11 corpus (−23.66pp absolute).",
+        "Promoting to EMOS lets the n>=30 capped-trades milestone accumulate under the calibrator that resolved MIA/high's analogous fragility.",
+        "d_ci lower bound is exactly 0.00 — ~2.5% of bootstrap replicates collapsed d to the σ²-floor. This is structurally more fragile than LAX/high's d_ci [3.06, 11.12], so the LAX/low rollback threshold is set at 10pp (vs 5pp for LAX/high) — more conservative to absorb the risk that the median d=0.83 is unrepresentative."
+      ],
+      "rollback_trigger": "If at 2026-06-11 refit `unstable_d` persists AND CV-OOS Brier improvement falls below 10pp, remove LAX/low from emos_enabled_cells and add LAX_low back to excluded_city_vars.",
+      "re_evaluate_at": "2026-06-11"
+    },
+    {
+      "cell": "MIA/low",
+      "warning_overridden": "unstable_d",
+      "rolled_back": true,
+      "rollback_date": "2026-05-24",
+      "rollback_reason": "Removed from emos_enabled_cells on the per-cell harness winner certification: iso_v2_global beats EMOS on the pre-registered hold-out (BSS LB +0.031, 5/5 folds). NOT corroborated by the cell-level '-37.2% ROI' figure — the 6 actual EMOS-era fills (fc 2026-05-17→21) returned +47.7%; that cell-lifetime ROI is dominated by isotonic-era + reconciler-synthetic trades. μ-calibration audit (docs/research/2026-05-26-mia-low-mu-calibration-audit.md) found no regime-shift μ-pathology; the structural EMOS barrier is unstable_d/σ-geometry (d=3.916 → σ_emos(GFS-std p99)/bw=3.56, LAX/high class). Re-evaluate at 2026-06-11 refit with a bounded-d constraint (cap d so σ_emos(p99)/bracket_width <= 2.0) plus a fresh harness win over iso_v2.",
+      "warning_definition": "Bootstrap 95% CI width on the EMOS `d` coefficient exceeds 4.0 (CI [1.38, 5.86], width 4.48). d lower bound is strictly positive (1.38) — structurally cleaner than LAX/low whose d_ci touched the σ²-floor at 0.00; point estimates of a, b, c are stable.",
+      "fit_artifact": {
+        "fit_date": "2026-05-11",
+        "commit": "not recorded (pre-release history)",
+        "n_train": 145,
+        "d_ci": [1.382, 5.865],
+        "d_point_estimate": 3.916,
+        "d_bootstrap_p50": 3.897
+      },
+      "cv_oos_brier": {
+        "emos": 0.1486,
+        "raw_gaussian": 0.2899,
+        "abs_improvement_pp": -14.13,
+        "rel_improvement_pct": -48.7
+      },
+      "stage_b_vs_isotonic": {
+        "n": 5053,
+        "brier_iso": 0.0946,
+        "brier_emos": 0.0698,
+        "bss_emos_vs_iso": 0.262,
+        "bss_ci": [0.258, 0.267],
+        "source": "data/emos/refit_validation_20260511T234543Z.json stage_b[5]"
+      },
+      "post_cutover_replay": {
+        "window": "2026-05-12 → 2026-05-15",
+        "n": 18,
+        "brier_iso": 0.0968,
+        "brier_emos": 0.0920,
+        "bss_emos_vs_iso": 0.049,
+        "bss_ci": [-0.38, 0.38],
+        "interpretation": "Directionally consistent with Stage A; CI too wide for independent confirmation at n=18. Per-day: EMOS wins 2026-05-13 (+0.22) and 2026-05-14 (+0.26); EMOS loses 2026-05-15 (-0.20), the SPLIT MODEL day where neither calibrator catches the GFS-vs-ECMWF disagreement. Promotion is justified by Stage A, not by yesterday's loss."
+      },
+      "justification": [
+        "Stage A BSS_emos_vs_iso = +0.262 [+0.258, +0.267] on n=5053 — second-largest improvement in the corpus after MIA/high.",
+        "Only `unstable_d` trips the gate; b/c CIs are tight (b [0.70, 1.06], c [0.51, 2.80]).",
+        "d_ci lower bound 1.38 > 0 — structurally cleaner than LAX/low (whose lower bound was 0.00).",
+        "Post-cutover replay (n=18) does not contradict Stage A; CI too wide for independent confirmation at this n.",
+        "Does NOT fix the GFS+ECMWF blend disagreement that drove the 2026-05-15 MIA/low loss; see split-model handling follow-up. Promotion is the calibration fix; the blend fix is a separate strategy question."
+      ],
+      "rollback_trigger": "If at 2026-06-11 refit `unstable_d` persists AND CV-OOS Brier improvement falls below 10pp, remove MIA/low from emos_enabled_cells. Match the LAX/low conservative threshold (not LAX/high's 5pp) because d_ci width is similar.",
+      "re_evaluate_at": "2026-06-11"
+    },
+    {
+      "cell": "NYC/high",
+      "warning_overridden": "unstable_d",
+      "warning_definition": "Bootstrap 95% CI width on the EMOS `d` (variance-slope) coefficient exceeds 4.0 (CI [0.018, 4.030], width 4.012). d lower bound is strictly positive (0.018) — structurally cleaner than LAX/low (whose d_ci touched the σ²-floor at 0.00) and similar in shape to LAX/high; point estimates of a, b, c are stable.",
+      "fit_artifact": {
+        "fit_date": "2026-05-11",
+        "commit": "not recorded (pre-release history)",
+        "n_train": 145,
+        "d_ci": [0.018, 4.030],
+        "d_point_estimate": 1.819,
+        "d_bootstrap_p50": 1.819
+      },
+      "cv_oos_brier": {
+        "emos": 0.1947,
+        "raw_gaussian": 0.2157,
+        "abs_improvement_pp": -2.10,
+        "rel_improvement_pct": -9.7
+      },
+      "stage_b_vs_isotonic": {
+        "n": 5318,
+        "brier_iso": 0.1457,
+        "brier_emos": 0.1397,
+        "bss_emos_vs_iso": 0.1837,
+        "bss_ci": [0.171, 0.197],
+        "mu_drift_degf": 0.429,
+        "source": "data/emos/refit_validation_20260511T234543Z.json stage_b NYC/high; cells NYC/high decision=PROMOTE"
+      },
+      "justification": [
+        "Stage B BSS_emos_vs_iso = +0.184 [+0.171, +0.197] on n=5318 — third-largest improvement in the corpus after MIA/high and MIA/low. CI lower bound +0.171 is more than 3x the +0.05 BSS gate.",
+        "Live cohort sanity: NYC/high is the best-performing isotonic cell since 2026-05-04 (n=22, win=0.682, positive PnL). Promotion is upside on a cell that is currently safe, not a rescue.",
+        "Only `unstable_d` trips the per-cell gate; b/c CIs are tight (b [1.02, 1.14], c [0.0, 11.83]).",
+        "d_ci lower bound 0.018 > 0 — structurally cleaner than LAX/low (whose lower bound was exactly 0.00). Similar shape to LAX/high, which has held without issue since 2026-05-11.",
+        "Promotion is the root-cause fix for the isotonic flat-bin pathology observed on 2026-05-16: the live isotonic artifact mapped 4 distinct raw_p inputs (0.127, 0.146, 0.154, 0.173) to a near-constant cal_p ~ 0.146 across NYC/high, AUS/*, contributing to 4 of 8 losses that day. EMOS is parametric continuous and structurally cannot produce flat plateaus.",
+        "Does NOT fix the [0.85, 0.95] cal_p reliability gap that drove most of the 5/14-5/16 dollar losses; that requires separate bracket-boost or confidence-bin work. Promotion is the calibration-resolution fix; the reliability-bin fix is independent."
+      ],
+      "rollback_trigger": "If at 2026-06-11 refit `unstable_d` persists AND Stage B BSS_emos_vs_iso falls below +0.05, remove NYC/high from emos_enabled_cells. Live falsification: if NYC/high live BSS_emos_vs_iso < -0.10 at n>=20 capped trades within 30 days, or cumulative PnL on NYC/high < -$30 over 14 consecutive trading days, hard-rollback the config change before the 2026-06-11 review.",
+      "re_evaluate_at": "2026-06-11"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "fit_date": "2026-04-16",
+  "n_pairs": 2106,
+  "spread_inflation": true,
+  "anchor_endpoints": true,
+  "anchor_weight": 10,
+  "brier_raw": 0.137838,
+  "brier_calibrated": 0.103763,
+  "improvement_pct": 24.72,
+  "breakpoints": [
+    0.0,
+    0.066667,
+    0.1,
+    0.266667,
+    0.3,
+    0.4,
+    0.433333,
+    0.866667,
+    0.9,
+    0.966667,
+    1.0
+  ],
+  "values": [
+    0.091398,
+    0.091398,
+    0.132948,
+    0.132948,
+    0.197368,
+    0.197368,
+    0.20122,
+    0.20122,
+    0.28,
+    0.28,
+    0.475
+  ]
+}

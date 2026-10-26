@@ -1,0 +1,155 @@
+[
+  {
+    "ticker": "KXHIGHNY-26MAR10-T60",
+    "series_ticker": "KXHIGHNY",
+    "city": "NYC",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "greater",
+    "floor_strike": 60.0,
+    "cap_strike": null,
+    "result": "yes",
+    "expiration_ts": 1741651200,
+    "expiration_date": "2025-03-11",
+    "candlesticks": [
+      {
+        "end_period_ts": 1741564800,
+        "yes_price_open": 62,
+        "yes_price_high": 68,
+        "yes_price_low": 60,
+        "yes_price_close": 65,
+        "no_price_open": 38,
+        "no_price_high": 40,
+        "no_price_low": 32,
+        "no_price_close": 35,
+        "volume": 150,
+        "open_interest": 80
+      },
+      {
+        "end_period_ts": 1741568400,
+        "yes_price_open": 65,
+        "yes_price_high": 70,
+        "yes_price_low": 63,
+        "yes_price_close": 68,
+        "no_price_open": 35,
+        "no_price_high": 37,
+        "no_price_low": 30,
+        "no_price_close": 32,
+        "volume": 200,
+        "open_interest": 90
+      }
+    ],
+    "candlestick_error": null
+  },
+  {
+    "ticker": "KXHIGHCHI-26MAR10-T50",
+    "series_ticker": "KXHIGHCHI",
+    "city": "CHI",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "greater",
+    "floor_strike": 50.0,
+    "cap_strike": null,
+    "result": "no",
+    "expiration_ts": 1741651200,
+    "expiration_date": "2025-03-11",
+    "candlesticks": [
+      {
+        "end_period_ts": 1741564800,
+        "yes_price_open": 52,
+        "yes_price_high": 58,
+        "yes_price_low": 50,
+        "yes_price_close": 55,
+        "no_price_open": 48,
+        "no_price_high": 50,
+        "no_price_low": 42,
+        "no_price_close": 45,
+        "volume": 120,
+        "open_interest": 60
+      }
+    ],
+    "candlestick_error": null
+  },
+  {
+    "ticker": "KXHIGHMIA-26MAR10-T80",
+    "series_ticker": "KXHIGHMIA",
+    "city": "MIA",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "greater",
+    "floor_strike": 80.0,
+    "cap_strike": null,
+    "result": "yes",
+    "expiration_ts": 1741651200,
+    "expiration_date": "2025-03-11",
+    "candlesticks": [
+      {
+        "end_period_ts": 1741564800,
+        "yes_price_open": 68,
+        "yes_price_high": 72,
+        "yes_price_low": 66,
+        "yes_price_close": 70,
+        "no_price_open": 32,
+        "no_price_high": 34,
+        "no_price_low": 28,
+        "no_price_close": 30,
+        "volume": 100,
+        "open_interest": 50
+      }
+    ],
+    "candlestick_error": null
+  },
+  {
+    "ticker": "KXHIGHDEN-26MAR10-B40-50",
+    "series_ticker": "KXHIGHDEN",
+    "city": "DEN",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "between",
+    "floor_strike": 40.0,
+    "cap_strike": 50.0,
+    "result": "no",
+    "expiration_ts": 1741651200,
+    "expiration_date": "2025-03-11",
+    "candlesticks": [
+      {
+        "end_period_ts": 1741564800,
+        "yes_price_open": 28,
+        "yes_price_high": 32,
+        "yes_price_low": 25,
+        "yes_price_close": 30,
+        "no_price_open": 72,
+        "no_price_high": 75,
+        "no_price_low": 68,
+        "no_price_close": 70,
+        "volume": 80,
+        "open_interest": 40
+      }
+    ],
+    "candlestick_error": null
+  },
+  {
+    "ticker": "KXHIGHNY-26MAR10-T70",
+    "series_ticker": "KXHIGHNY",
+    "city": "NYC",
+    "daily_variable": "temperature_2m_max",
+    "strike_type": "greater",
+    "floor_strike": 70.0,
+    "cap_strike": null,
+    "result": null,
+    "expiration_ts": 1741651200,
+    "expiration_date": "2025-03-11",
+    "candlesticks": [
+      {
+        "end_period_ts": 1741564800,
+        "yes_price_open": 20,
+        "yes_price_high": 25,
+        "yes_price_low": 18,
+        "yes_price_close": 22,
+        "no_price_open": 80,
+        "no_price_high": 82,
+        "no_price_low": 75,
+        "no_price_close": 78,
+        "volume": 90,
+        "open_interest": 45
+      }
+    ],
+    "candlestick_error": null
+  }
+]

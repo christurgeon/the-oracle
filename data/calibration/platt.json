@@ -1,0 +1,28 @@
+{
+  "schema_version": 3,
+  "fit_date": "2026-05-19",
+  "input_pipeline": "production_mirrored",
+  "bias_correction_applied": true,
+  "ensemble_weights": {
+    "gfs_seamless": 0.55,
+    "ecmwf_ifs025": 0.45
+  },
+  "spread_inflation": true,
+  "source_snapshots_dir": "data/snapshots",
+  "a": -1.721599,
+  "b": 0.793585,
+  "n_pairs": 4584,
+  "brier_raw": 0.171747,
+  "brier_calibrated": 0.138313,
+  "improvement_pct": 19.47,
+  "cv": {
+    "n_folds": 5,
+    "n_evaluated_folds": 5,
+    "n_skipped_folds": 0,
+    "raw_brier_mean": 0.1717512118676707,
+    "raw_brier_std": 0.012329936590938468,
+    "cal_brier_mean": 0.13855934006464615,
+    "cal_brier_std": 0.010866309541010847,
+    "improvement_pct": 19.325553189457505
+  }
+}

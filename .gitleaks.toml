@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Test placeholders and variable names that look like keys"
+regexes = [
+  '''secret-(kalshi|anthropic)-\d+''',
+  '''^sig1\.market_id$''',
+]

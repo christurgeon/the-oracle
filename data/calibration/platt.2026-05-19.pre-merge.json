@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "fit_date": "2026-04-20",
+  "spread_inflation": true,
+  "source_snapshots_dir": "data/snapshots",
+  "a": -2.234471,
+  "b": 1.32697,
+  "n_pairs": 2496,
+  "brier_raw": 0.135642,
+  "brier_calibrated": 0.102164,
+  "improvement_pct": 24.68
+}

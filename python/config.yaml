@@ -1,0 +1,395 @@
+# The Oracle — Configuration
+
+execution:
+  mode: shadow  # shadow | paper | live
+  poll_interval_seconds: 60
+  websocket_reconnect_delay: 5
+  websocket_idle_timeout_seconds: 90   # bound idle WS receive; must be < stale_data_cutoff (300)
+  order_ttl_seconds: 120  # cancel unfilled orders after 2 min; 0 = disabled
+  cross_to_ask_max_spread_cents: 1
+  startup_delay_seconds: 30
+  reconcile_interval_ticks: 15       # every 15 ticks (~15 min at 60s poll)
+  reconcile_bankroll_threshold: 1.0  # alert if bankroll drifts > $1
+  reconcile_position_threshold: 0.5  # alert if any position drifts > $0.50
+  emit_placement_rows: true          # durable strategy attribution for synthetic fill rows
+
+strategies:
+  weather:
+    enabled: true
+    # Shadow-only: weather_edge keeps evaluating + logging the calibration corpus
+    # but places ZERO orders. Adopted 2026-06-07 — the daily between book has no
+    # demonstrated edge vs the efficient morning 1°F market (slow bleed ~= fee
+    # rate; all rescue attempts falsified). Rollback: set false + restart.
+    shadow_only: true
+    edge_threshold: 0.07
+    max_edge: 0.30                   # reject phantom edges from uncalibrated tails
+    cities: [NYC, CHI, MIA, LAX, DEN, AUS, SEA]
+    ensemble_source: open-meteo
+    ensemble_models: [gfs_seamless, ecmwf_ifs025]
+    ensemble_weights:
+      gfs_seamless: 0.55             # slightly favored: 4x/day runs, US-optimized DA
+      ecmwf_ifs025: 0.45
+    spread_skill_sensitivity: 0.15   # ensemble uncertainty discount (uses pre-inflation std_dev)
+    max_spread: 0.15
+    orderbook_depth_check: true
+    min_book_depth: 5
+    book_depth_levels: 10            # price levels per side requested from Kalshi /orderbook
+    orderbook_concurrency: 2         # max parallel /orderbook fetches per scan
+    forecast_concurrency: 1          # AUTHORITATIVE cap on concurrent Open-Meteo requests; 1 = serialized (free tier 429s "Too many concurrent requests" at 2)
+    forecast_fetch_timeout_seconds: 15.0      # per-cell ensemble fetch budget (fail-soft)
+    forecast_prefetch_timeout_seconds: 45.0   # overall prefetch ceiling; < WatchdogSec (120s)
+    orderbook_settle_delay_seconds: 0.0  # per-fetch settle delay; 0 = no sleep
+    max_fill_slippage: 0.04          # reject Stage-2 if VWAP drifts >4c from best level
+    bias_correction_enabled: true
+    bias_shrinkage: 0.3
+    bias_max_correction_f: 5.0
+    # Bias table: null = canonical ERA5-fit table (data/gfs_bias/bias_correction.json).
+    # Settlement-anchored (NWS CLI) table improves held-out GFS MAE 3.30->3.00°F.
+    # EMOS-owned cells (LAX/low) are omitted from the NWS table so EMOS keeps the mean.
+    # Flip: set to data/nws_bias/bias_correction.json + restart. Rollback: null + restart.
+    bias_table_path: data/nws_bias/bias_correction.json
+    # Calibration layer: none | isotonic | platt | per_type_platt. Artifacts: data/calibration/
+    # 2026-05-22: restored to isotonic on isotonic_v2 artifact (post-bracket-fix refit, bounded-exposure pilot).
+    calibration_type: isotonic
+    # 2026-05-22: bounded-exposure pilot — non-default path so the canonical artifact remains the 5-12 fit
+    # as a fallback. See docs/research/2026-05-22-isotonic-refit-bounded-exposure-pilot.md.
+    # 2026-07-04: isotonic_v3 — ERA5→NWS re-anchor refit (45-day staleness + 2.6x corpus growth
+    # triggers). n=12,540, GroupKFold CV +8.1% (leakage-free), values[0]=0.0535. Fit:
+    # scripts/fit_isotonic.py --bias-table data/nws_bias/bias_correction.json. Rollback:
+    # isotonic_v2.json (kept on disk) + restore block_raw_prob_range [0.446, 0.883] + restart.
+    isotonic_path: data/calibration/isotonic_v3.json
+    shadow_calibrator: null         # parallel shadow calibrator (logged, never traded); null = off
+    min_raw_prob_for_between: 0.12  # blocks BETWEEN near-misses before edge computation (R1 sign-flip gate complement); 2026-05-21 raised 0.05→0.12 to preserve pre-fix selection rate under 2°F bracket window
+    # Reject ABOVE/BELOW strikes within k*std of the ensemble median — avoids isotonic plateau artifacts.
+    min_distance_from_strike_std: 2.0
+    # Derived per-fit via scripts/validate_plateau_bounds.py — regenerate after any calibrator refit.
+    # 2026-07-04: null — validate_plateau_bounds finds NO dangerous plateau in isotonic_v3 (the
+    # 2.6x corpus resolves the old flat region into a rising staircase); a stale range would
+    # silently block healthy mid-range candidates. Re-derive on every future refit.
+    # Previous: [0.446, 0.883] (isotonic_v2), [0.645, 0.967] (5-19 refit), [0.649, 0.967] (5-12 refit).
+    block_raw_prob_range: null
+    # Live/paper only (shadow exempt for validation). Set to null to disable.
+    # 2026-05-22: raised 0.10→0.110 as calibrator-coupled re-derivation under isotonic_v2
+    # (values[0]=0.099). Restores FLOOR_DEFEAT_EPSILON=0.010 safety margin so the floor
+    # filter cannot be silently defeated by curve drift (2026-05-19 incident guard).
+    min_calibrated_prob: 0.110
+    # Blocks lead_days≤2 trades where model diverges from market > threshold (GFS ingestion lag guard).
+    max_model_market_gap_near_term: 0.45
+    candidate_audit_log: true     # state/candidate_audit.jsonl (one row per Stage-1 candidate)
+    eval_audit_log: true          # state/eval_audit.jsonl (one row per evaluated market)
+    scan_funnel_log: true         # state/scan_funnel.jsonl (one row per scan cycle)
+    audit_log_retention_days: 35   # 2026-07-04: 30→35 — the calibration monitor now sources its corpus from eval_audit.jsonl (corpus_source), whose 30d window must survive rotation pruning with margin
+    excluded_city_vars:           # cells failing the non-overridable EMOS σ-veto (σ/bw > 2.0); see data/emos/overrides.json and docs/research/2026-05-23-cell-unblock-analysis.md
+      # Snapshots collect all cities regardless. Re-evaluate: run backtest, check BSS, fit EMOS.
+      - DEN_low      # σ-veto: σ_emos/bw=2.80; high `c=16.60` floor dominates variance
+      - DEN_high     # σ-veto: σ_emos/bw=4.23; high `c=30.37` intrinsic-uncertainty floor (Rocky Mountain orographic)
+      - SEA_high     # σ-veto: σ_emos/bw=2.84; high `c=15.75` floor (Puget Sound marine boundary layer)
+      - LAX_high     # unstable_d override revoked 2026-05-18; live BSS_emos_vs_iso=-4.0%, EMOS sigma=6.8F incompatible with 1F brackets (pre-fix) — still incompatible with 2F brackets (post-fix bracket-window 2026-05-21): σ_emos/bw=2.76, ROI=-39.6% in 7 days
+      # 2026-05-22 pre-emptive pilot exclusions under isotonic_v2 (bounded-exposure refit pilot).
+      # Re-evaluate ~2026-06-05 once n≥5 post-fix settled days exist per cell.
+      - AUS_high     # backtest alpha loss under post-2°F-bracket-fix math
+      - CHI_high     # same; replay 2026-05-22 confirms near-zero wins (identity 0/16, isotonic_v2 2/17) in 28d holdout
+      - CHI_low      # demoted from EMOS 2026-05-21; no LIVE post-fix isotonic trades (Stage-1 replay shows n=12, +12pp under-prediction)
+    # Boundary-distance suppressive filter — per-cell °F threshold.
+    # Path 7a; evidence in docs/research/2026-05-28-boundary-aware-phase0-backtest.md.
+    # ENABLED 2026-05-29: MIA/low at 0.5°F (lead deployment). Phase 0 evidence
+    # (dc CI [+20.2, +158.0], block CI [+24.4, +118.8] on existing corpus;
+    # uncorrected — fails Bonferroni for the 72-cell grid, so this is a
+    # ship-behind-flag pilot, not confirmed). BETWEEN-only.
+    # Kill (spec §6.5): at n>=20 post-enablement settled MIA/low trades, if
+    # day-clustered CI95_lower < 0 AND point < incumbent, empty this and
+    # restart. Track: daily_trade_report.py --boundary-since 2026-05-29.
+    # Instant halt: touch state/STOP. Rollback: set back to {} + restart.
+    boundary_filter_cells:
+      MIA/low: 0.5
+    max_bets_per_day_per_event: 1   # int >= 1 or null (null = no cap)
+    bracket_monitor:
+      enabled: true
+      directional_boost_threshold: 0.03    # bid_sum deviation to trigger boost
+      directional_boost_factor: 1.05       # cosmetic only — validation 2026-05-18 confirmed signal real but wiring is post-Stage-2
+      max_boost: 1.30
+      weather_maker_free: true             # $0 maker fees on weather (most non-sports markets)
+    same_day_trading:
+      enabled: false                       # master switch — default-off rollout
+      allowed_cities: []                   # per-city allow-list — empty = none
+      cache_ttl_seconds: 600               # default negative-cache TTL
+      near_peak_ttl_seconds: 90            # tightened TTL within near_peak_window of peak
+      near_peak_window_minutes: 120        # half-width of "near peak" window
+      peak_cutoff_minutes: 60              # how long after peak to keep allowing trades
+      nws_request_timeout_seconds: 4       # per-request httpx timeout for NWSClient
+      nws_gate_timeout_seconds: 20         # outer asyncio.wait_for budget for gate.check()
+    nbm_bracket_position_veto:
+      # Shadow-only this release — gate computes ``nbm_veto_fired`` on every
+      # between-strike candidate and writes it to eval_audit, but does NOT
+      # reject trades while ``enabled: false``. Flip to true only after the
+      # n≥80 shadow promotion gate clears.
+      enabled: false
+      fail_open: true                      # fetch failure ⇒ skip gate (no veto)
+      fetch_timeout_seconds: 4.0           # per-fetch asyncio.wait_for budget
+    emos_shadow_log: false                 # true = EMOS load failures → ERROR + alert; false = WARNING + fallback
+    emos_coefficients_path: data/emos/coefficients.json
+    # Runtime σ-gate: reject live EMOS trades where σ_emos(ens_std_now) / 1°F > threshold.
+    # Mirrors the fit-time DEFAULT_INCOMPATIBLE_SIGMA_THRESHOLD; rollback by setting to a large
+    # value (e.g. 9999).
+    emos_runtime_sigma_threshold: 2.0
+    # EMOS live calibrator cells; all others use isotonic. Empty = all-isotonic.
+    # Overrides in data/emos/overrides.json. Re-evaluate monthly per per-cell rule.
+    emos_enabled_cells: []
+      # Harness 2026-05-24 certified iso_v2_global as winner for MIA/high (LB +0.014, 5/5 folds)
+      # and MIA/low (LB +0.031, 5/5 folds), so both removed from EMOS. EMOS coefficients
+      # remain in data/emos/coefficients.json for potential future re-add. The rollback rests
+      # on the harness hold-out cert. NB: the "-37.2% MIA/low ROI" in
+      # docs/research/2026-05-24-harness-zero-winners-investigation.md is a CELL-level figure
+      # dominated by isotonic-era + reconciler-synthetic trades, NOT EMOS-era ROI — the 6 actual
+      # EMOS-era fills (fc 2026-05-17→21) returned +47.7%; do not cite it as EMOS corroboration.
+      # See docs/research/2026-05-26-mia-low-mu-calibration-audit.md.
+      # 2026-06-05: LAX/low SUSPENDED — reverted to isotonic. Three converging red
+      # flags over fc 2026-06-02→04 (0/3, -102% ROI): EMOS sigma~1.9F vs 1F brackets
+      # (~2x bracket width), live `unstable_d` coefficient warning (d=0.774, a
+      # promotion-BLOCKING condition that predates the tightened gate), and a ~2.5F
+      # cold mu bias (mu~57.5F while actual lows hit the 59-62F brackets it bet NO
+      # against). Same failure mode as LAX/high. EMOS coeffs remain in
+      # data/emos/coefficients.json for re-add after a mu-bias/sigma fix. Empty list
+      # = all-isotonic, bit-identical rollback.
+    # Same-day Kelly correlation haircut (F4.1). Shipped 2026-05-19 as a no-op
+    # (rho=0.0) — empirical cross-(city,var) ρ on settled trades is +0.01
+    # (95% bootstrap CI [-0.05, +0.09], n=1392 pairs). Set to a non-zero value
+    # to activate ``dollars *= 1/sqrt(1 + n_existing · rho)`` in fractional_kelly.
+    # Set to null to disable the haircut path entirely (legacy fractional Kelly).
+    # Scope: INTER-scan only — n_existing counts positions already open from
+    # PRIOR scans; intra-scan parallel candidates each see the same pre-scan
+    # count. At rho=0.0 this is moot.
+    same_day_correlation_rho: 0.0
+
+  favorite_bias:
+    # Out-of-sample validation did not confirm a forward edge. Enabling it also
+    # needs a risk.strategy_allocations entry, or startup refuses to run.
+    enabled: false
+    band_low: 0.50                 # below 0.50 the contract is an underdog and the favorite lift is absent
+    band_high: 0.75                # g(mid) is out of fitted domain above 0.75
+    min_volume_fp: 50              # liquidity gate, not an edge filter
+    edge_floor: 0.01               # g(mid) - price - taker fee must clear this, per contract
+    max_spread: null               # skip when yes_ask - yes_bid exceeds this (dollars); null = off
+    lead: 1                        # days before the observation date
+    strike_types: [greater, less]
+    isotonic_path: data/calibration/favorite_bias_isotonic.json
+    kelly_fraction: 0.10           # g(mid) is fitted in-sample and overstates forward edge
+    max_pct: 0.05                  # keep above risk.max_single_market_pct x exposure pct, or this cap binds first
+    max_contracts_per_trade: 10
+    max_book_walk_cents: 0         # >0 lets the limit walk up the book, only through levels still clearing edge_floor
+    max_bets_per_day_per_event: 1
+    audit_path: state/favorite_bias_audit.jsonl
+    execution_taker: true
+    resting_ttl_seconds: 600       # null = global execution.order_ttl_seconds (120)
+    excluded_city_vars: []
+    climatology_path: data/calibration/fb_climatology.json  # z_strike/q_clim logged on every audit row
+    max_strike_climatology_z: null # tail-strike guard; null = off
+    clim_min_n: 15
+
+  intraday_emos_high:
+    # ⚠ PARKED 2026-06-07 (enabled=false). The forward shadow corpus stalled
+    # (1419 tick-rows → only 5 markets across 2 dates, dark since 2026-06-01) AND
+    # logging is edge-selected — only Stage-1 survivors (edge ≥0.07) reach
+    # predictions.jsonl (_record_prediction at intraday_emos_high.py:958), so the
+    # corpus structurally cannot fill the low-p NO bin that gates a live flip.
+    # It is also redundant with intraday_asos_high, which owns the same
+    # same-day-KXHIGH lane, ingests REAL observations (the legitimate 1°F-bracket
+    # exemption), is correctly instrumented, and is accruing. ASOS carries the
+    # intraday frontier; EMOS is parked, NOT deleted (option value: a future
+    # ASOS-prior + EMOS-forecast Bayesian combination). UN-PARK = set enabled:true (returns in shadow mode
+    # because shadow_only stays true), then deploy + restart oracle-bot.service.
+    enabled: false
+    shadow_only: true      # NO orders when enabled (§4.1); moot while parked
+    # Pre-registered v6-audited cells.
+    enabled_cells:
+      - MIA/high
+      - LAX/high
+    edge_threshold: 0.07            # v6 audited value
+    max_edge: 0.30                  # phantom-edge rejection
+    min_distance_from_strike_std: 2.0   # v6 binding; Pydantic enforces ge=2.0
+    max_contracts_per_trade: 50         # v6 NBBO_SIZE_CAP; Pydantic enforces le=50
+    max_trades_per_cell_per_day: 3      # daily-loss bound (§9.2(b))
+    emos_hot_reload_pause_seconds: 60   # matches EmosTable build-then-swap envelope
+
+  intraday_asos_high:
+    # ⚠ PARKED 2026-07-19 — the forward shadow corpus FALSIFIED the strategy.
+    # 44 days / 12,564 settled obs (2026-06-06..07-19) show the ASOS posterior has
+    # no edge vs the market, so the pre-registered live-flip gate can never be met:
+    #   - raw posterior Brier 0.1834 — WORSE than climatology (0.1806); market 0.1185
+    #   - OOS-calibrated posterior still loses to the market by 0.0511 Brier,
+    #     day-clustered 95% CI [-0.0630,-0.0382], CI excludes 0 in ALL FIVE cells
+    #   - realizable ROI (first qualifying signal): -5.7% @1¢ half-spread,
+    #     -10.5% @2¢, -25.0% @5¢. Contracts ≤$0.10 (half the book) win 3.0% → -53.4%
+    # Root cause = the NBM-gap failure mode: gap-selection is adverse selection
+    # against a sharper price. See docs/research/2026-07-19-new-data-edge-audit.md.
+    # Parked, NOT deleted — the ASOS observation client + climatology artifact keep
+    # option value for a future model. UN-PARK = enabled:true AND re-add the
+    # risk.strategy_allocations entry below, then deploy + restart oracle-bot.service.
+    enabled: false
+    shadow_only: true      # NO orders when enabled; moot while parked
+    enabled_cells: [MIA/high, AUS/high, CHI/high, NYC/high]
+    informational_cells: [LAX/high]
+    climatology_path: data/asos/climatology.json
+    posterior_t_dof: 5
+    boundary_distance_min_f: 1.0
+    asos_max_staleness_hours: 2.0
+    sigma_gain_floor_f: 0.5
+    bad_prelim_max_drift_f: 10.0
+    bad_prelim_active: false
+    edge_threshold: 0.07
+    min_calibrated_prob: 0.110
+    # Per-strategy sizing knobs (NOT the global risk.kelly_fraction / risk.max_single_market_pct).
+    # ASOS is a newer posterior — start conservatively, re-evaluate after n≥30 settled trades.
+    kelly_fraction: 0.075
+    max_single_market_pct: 0.05
+    max_contracts_per_trade: 15
+    max_trades_per_cell_per_day: 3
+    orderbook_depth_check: true
+    asos_obs_cache_ttl_seconds: 600   # IEM/ASOS obs cache TTL; ASOS data is ~hourly, so 600s cuts IEM request volume (429 guard). Bounded [60,3600].
+
+risk:
+  # Per-market cap: this x effective exposure pct x equity. It can bind before a strategy's own cap.
+  max_single_market_pct: 0.05
+  # A Telegram /setexposure override persists in state/exposure_override.json and wins over this.
+  max_total_exposure_pct: 0.50
+  # Scale both with the per-trade stake and revert them together with it; daily must stay < drawdown.
+  max_daily_loss_pct: 0.10
+  # Drawdown is measured on equity, so re-anchor peak_bankroll after any deposit or withdrawal (operations runbook).
+  max_drawdown_pct: 0.15
+  drawdown_size_reduction: 0.50
+  kelly_fraction: 0.075            # weather_edge only; favorite_bias uses its own kelly_fraction
+  # Max distinct forecast dates held at once per (city, var); brackets within one event do not count.
+  max_correlated_positions: 3
+  stale_data_cutoff_seconds: 300
+  # Every key MUST be a registered (enabled) strategy, or startup crash-loops; remove a parked strategy's key.
+  # An absent key sizes off full equity, so weather_edge must stay an explicit 0.0.
+  strategy_allocations:
+    weather_edge: 0.0
+
+circuit_breakers:
+  rolling_window_days: 7
+  # Per-strategy rolling loss limit; scale it with the per-trade stake.
+  max_loss_pct: 0.15
+  min_win_rate: 0.35
+  min_trades_for_win_rate: 20
+  data_staleness_multiplier: 2
+
+telegram:
+  enabled: false                   # needs `uv sync --extra telegram` and the token/chat id in .env
+  poll_interval: 1.0
+  max_messages_per_minute: 20
+  silent_bot_alert_hours: 12.0
+  strategy_silent_alert_hours: 30.0
+
+logging:
+  level: INFO
+  renderer: console
+  log_file: state/oracle.log
+  log_file_max_bytes: 50000000
+  log_file_backup_count: 5
+  module_levels:
+    httpx: WARNING
+
+market_filter:
+  min_volume: 10                   # empirical knee: spreads tight from vol>=10 (~2c median)
+  min_open_interest: 5             # skip markets with fewer open contracts (stale quotes)
+  min_time_to_expiry_seconds: 3600
+  min_spread: 0.03
+  min_price: 0.01
+  max_price: 0.97                  # asymmetric gate; revisit after additional high-tail data
+  max_orderbook_take_pct: 0.50
+
+attribution:
+  enabled: true
+  settlements_path: data/shadow_settlements.full.json
+
+calibration_monitor:
+  enabled: true
+  # 2026-07-04: corpus source moved to the Stage-1 eval stream so a $0 pod
+  # can't dark the corpus (2026-06-16 predictions.jsonl freeze incident).
+  # Rollback: corpus_source: predictions (tick_interval/retention below can
+  # stay at the new values — both are fine for the predictions source too).
+  corpus_source: eval_audit
+  # 2026-07-04: 300->900 with corpus_source=eval_audit — the shared eval stream is
+  # ~10^5 rows/day and a full windowed read costs ~35s; a 15-min cadence keeps the
+  # monitor's CPU share negligible on the 2-vCPU box.
+  tick_interval_seconds: 900.0
+  warmup_pairs: 40
+  # 2026-05-22: relaxed for isotonic_v2 pilot — 30d baseline was computed under identity/pre-fix
+  # math; first 14d post-flip will have noisy Brier ratios. Revert (1.3 / 1.6) ~2026-06-05.
+  brier_warn_mult: 1.6             # 7d Brier ≥ 1.6× 30d baseline → warning (was 1.3)
+  brier_crit_mult: 2.0             # 7d Brier ≥ 2.0× 30d baseline → critical (was 1.6)
+  bin_deviation_threshold: 0.15    # |observed - predicted| in any bin with n ≥ bin_min_n
+  # 2026-06-19: disabled. The monitor corpus is built ONLY from weather_edge
+  # predictions (calibration_monitor.py _record_to_pair* gate on strategy), and
+  # weather_edge has been shadow-only (zero orders) since 2026-06-07 — so this
+  # absolute-miscalibration alert was firing ~6×/day on a non-trading corpus
+  # with a known, documented-dead low-p miss = pure noise. The relative
+  # brier_7d_vs_30d drift alert and the city_var_brier economic alert stay on.
+  # Single-flag rollback: set true + restart (re-enable if weather_edge goes live).
+  bin_deviation_enabled: false
+  bin_min_n: 20
+  city_var_brier_threshold: 0.25
+  city_var_min_n: 20
+  alert_cooldown_seconds: 14400
+  state_path: state/calibration_monitor.json
+  snapshots_dir: data/snapshots
+  prediction_log_path: state/predictions.jsonl
+  # F8.1 (2026-05-19): outcome source for prediction-vs-outcome join.
+  #   kalshi (default): joins shadow_settlements.full.json on market_ticker —
+  #     same authoritative outcomes the trade dashboards use. Brier feeding any
+  #     kill decision MUST be on this path.
+  #   nws: legacy NWS-CLI join via snapshots_dir (kept as fast-path lead
+  #     indicator). On a 248-market spot-check this disagreed with Kalshi on
+  #     18% of markets.
+  settlement_source: kalshi
+  kalshi_settlements_path: data/shadow_settlements.full.json
+
+# Trade-log write-behind reconciler — backfills synthetic fill rows from /portfolio/fills.
+fills_reconciler:
+  enabled: true
+  reconcile_interval_ticks: 5
+  eventual_consistency_window_seconds: 120
+  startup_safety_window_hours: 24
+  startup_max_window_hours: 168
+  max_pages_per_tick: 20
+  max_fills_per_tick: 50
+  page_delay_ms: 250
+  placement_row_lookback: 10000
+  alert_threshold_consecutive: 3
+  alert_threshold_critical_delta: 3
+  critical_alert_cooldown_seconds: 3600
+  state_file: state/fills_reconciler.json
+  manual_close_enabled: false                  # see the runbook's manual-close rollout before enabling
+  manual_close_apply_limit_per_restart: 1      # canary: first apply per restart only
+  shakedown_seen_oids_file: state/shakedown_seen_oids.json
+  cash_out_apply_enabled: false
+  cash_out_apply_limit_per_restart: 1
+  cash_out_max_pnl_apply_dollars: 500.0
+  shakedown_seen_oids_cash_out_file: state/shakedown_seen_oids_cash_out.json
+
+# KXRAIN shadow observer: logging only, zero orders. Not a strategy; never give it a risk.strategy_allocations entry.
+kxrain_shadow:
+  enabled: false
+  series_ticker: KXRAIN
+  tick_interval_seconds: 600
+  # Pre-registered rule: changing the window, band, lookback or entry cap starts a new pre-registration.
+  entry_window_start_lst: "10:00"     # local standard time, never DST
+  entry_window_end_lst: "18:00"       # LST because the backtest bucketed days in LST
+  yes_bid_min: 0.10                   # inclusive
+  yes_bid_max: 0.90                   # exclusive
+  no_trade_lookback_minutes: 30
+  max_entries_per_day: null           # null = no cap
+  assumed_max_walk_cents: 1           # recorded on every row; nothing is enforced (no orders)
+  depth_levels: 10
+  depth_capture_mode: band            # band | all — `band` skips book/trade reads for out-of-band markets
+  max_requests_per_tick: 60           # hard per-tick Kalshi request budget
+  request_pacing_seconds: 1.0         # spacing between per-market reads (sliding-window 429 guard)
+  tick_wall_clock_budget_seconds: 180
+  post_entry_follow_minutes: 45       # book/trade capture stays pinned on this long after a virtual entry
+  min_free_disk_bytes: 2147483648     # 2 GiB
+  settlement_capture_hour_utc: 14     # daily sweep reaches ~28 days back; for longer gaps run scripts/kxrain_backfill_settlements.py
+  settlement_sweep_max_pages: 8
+  log_dir: state
+  log_retention_days: 240             # sized for an 18-week gate
+  trades_page_limit: 100

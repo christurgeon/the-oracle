@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/christurgeon/the-oracle/security/advisories/new
+    about: Report security problems privately. Do not open a public issue.
+  - name: Kalshi account, exchange, or API problem
+    url: https://help.kalshi.com/
+    about: This project is not affiliated with Kalshi. Contact Kalshi for these problems.
+  - name: Questions and feature requests
+    url: https://github.com/christurgeon/the-oracle#project-status
+    about: This project does not offer support or take feature requests. Read the project status.

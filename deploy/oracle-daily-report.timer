@@ -1,0 +1,13 @@
+[Unit]
+Description=Daily oracle trade report (11:00 UTC)
+Requires=oracle-daily-report.service
+
+[Timer]
+OnCalendar=*-*-* 11:00:00 UTC
+OnBootSec=10min
+Persistent=true
+AccuracySec=1min
+Unit=oracle-daily-report.service
+
+[Install]
+WantedBy=timers.target

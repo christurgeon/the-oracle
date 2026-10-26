@@ -1,0 +1,15 @@
+[Unit]
+Description=Send Telegram alert for failed systemd unit %i
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=oracle
+Group=oracle
+EnvironmentFile=/opt/oracle/.env
+
+ExecStart=/opt/oracle/deploy/oracle-alert-failure.sh %i
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=oracle-alert-failure

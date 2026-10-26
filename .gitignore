@@ -1,0 +1,121 @@
+# Git worktrees
+.worktrees/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment & secrets
+.env
+*.pem
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+*.parquet
+*.csv
+*.db
+
+# State
+state/
+
+# Logs
+*.log
+logs/
+
+# Backtest data
+data/backtest/
+
+# Raw Kalshi market data may not be redistributed, so snapshots live in a
+# private checkout and are symlinked here (deploy/update.sh). No trailing
+# slash: the path is a symlink, which a directory pattern does not match.
+/data/snapshots
+
+# EMOS corpus output (directory tracked via .gitkeep; parquet is generated)
+/data/emos/corpus.parquet
+
+# Shadow trading analysis artifacts (local, pulled from VPS)
+data/shadow_*.json
+data/vps_trades.jsonl
+data/archive/
+data/audit/
+data/vps_audit/
+data/vps_pull_*/
+data/dashboard_report.json
+
+# Post-mortem outputs
+/data/post_mortems/
+/docs/post-mortems/
+
+# Claude Code
+.claude/settings.local.json
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+.claude/skills/package-lock.json
+
+# Claude Code CLI runtime and session state, for a checkout that is also the
+# CLI home directory. These files hold credentials and local session data.
+.claude.json
+.claude/.credentials.json
+.claude/.credentials.json.bak
+.claude/.last-cleanup
+.claude/backups/
+.claude/cache/
+.claude/history.jsonl
+.claude/mcp-needs-auth-cache.json
+.claude/plugins/
+.claude/projects/
+.claude/sessions/
+.cache/
+.local/
+
+# SSH keys and config, for a checkout that is also a home directory
+.ssh/
+
+# Archived research artifacts (kept locally, not version-controlled)
+.research_archive/
+
+# edge-search local artifacts (regenerable; never commit)
+data/research/candles_corpus.jsonl
+data/research/eval_audit_results.json
+data/research/asos_1min/
+data/research/hrrr/
+data/research/g0/
+
+# ship-feature live workflow scratch state (resume cursor/task status; not a design record)
+.feature/*/state.json
+
+# Superpowers plans/specs — historical planning artifacts, not trusted source of truth
+# (re-evaluate from data, not old design docs)
+docs/superpowers/
+
+# Local-only notes (not part of the project)
+/CLAUDE.local.md
+/.feature/
+/docs/plans/
+/docs/in-flight-work.md
+/docs/business-ideas.md
+/docs/feature-ideas.md

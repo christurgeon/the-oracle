@@ -1,0 +1,375 @@
+{
+  "generated_at": "2026-05-23T00:32:10.348105+00:00",
+  "n_pairs": 30504,
+  "join_stats": {
+    "total_markets": 33918,
+    "total_forecasts": 13104,
+    "total_settlements": 828,
+    "matched_pairs": 30504,
+    "orphaned_no_settlement": 2466,
+    "orphaned_no_forecast": 0
+  },
+  "overall": {
+    "brier_score": 0.13748677769035755,
+    "bss": 0.010095200629425705,
+    "reliability": 0.021550419473474407,
+    "resolution": 0.022662214484776216,
+    "uncertainty": 0.1388888888888889,
+    "bs_ci_low": 0.1301854409658277,
+    "bs_ci_high": 0.14536133778437194,
+    "ece": 0.12019516566133402,
+    "log_loss": 0.5258369705438972,
+    "base_rate": 0.16666666666666666
+  },
+  "calibration_bins": [
+    {
+      "range": "0%-10%",
+      "count": 19736,
+      "mean_predicted": 0.0067,
+      "observed_freq": 0.0927,
+      "deviation": 0.086,
+      "ci_low": 0.0888,
+      "ci_high": 0.0969
+    },
+    {
+      "range": "10%-20%",
+      "count": 2301,
+      "mean_predicted": 0.1324,
+      "observed_freq": 0.1651,
+      "deviation": 0.0327,
+      "ci_low": 0.1505,
+      "ci_high": 0.1809
+    },
+    {
+      "range": "20%-30%",
+      "count": 2197,
+      "mean_predicted": 0.2448,
+      "observed_freq": 0.1538,
+      "deviation": -0.0909,
+      "ci_low": 0.1394,
+      "ci_high": 0.1695
+    },
+    {
+      "range": "30%-40%",
+      "count": 981,
+      "mean_predicted": 0.3464,
+      "observed_freq": 0.208,
+      "deviation": -0.1385,
+      "ci_low": 0.1837,
+      "ci_high": 0.2345
+    },
+    {
+      "range": "40%-50%",
+      "count": 1056,
+      "mean_predicted": 0.4323,
+      "observed_freq": 0.2292,
+      "deviation": -0.2031,
+      "ci_low": 0.2048,
+      "ci_high": 0.2555
+    },
+    {
+      "range": "50%-60%",
+      "count": 1013,
+      "mean_predicted": 0.5463,
+      "observed_freq": 0.2517,
+      "deviation": -0.2946,
+      "ci_low": 0.226,
+      "ci_high": 0.2794
+    },
+    {
+      "range": "60%-70%",
+      "count": 476,
+      "mean_predicted": 0.6633,
+      "observed_freq": 0.3739,
+      "deviation": -0.2894,
+      "ci_low": 0.3317,
+      "ci_high": 0.4183
+    },
+    {
+      "range": "70%-80%",
+      "count": 333,
+      "mean_predicted": 0.7508,
+      "observed_freq": 0.4024,
+      "deviation": -0.3483,
+      "ci_low": 0.3511,
+      "ci_high": 0.4559
+    },
+    {
+      "range": "80%-90%",
+      "count": 384,
+      "mean_predicted": 0.8341,
+      "observed_freq": 0.487,
+      "deviation": -0.3471,
+      "ci_low": 0.4374,
+      "ci_high": 0.5369
+    },
+    {
+      "range": "90%-100%",
+      "count": 2027,
+      "mean_predicted": 0.984,
+      "observed_freq": 0.6591,
+      "deviation": -0.3249,
+      "ci_low": 0.6382,
+      "ci_high": 0.6794
+    }
+  ],
+  "city_bias": [
+    {
+      "city": "AUS",
+      "variable": "temperature_2m_max",
+      "count": 2244,
+      "bias": 0.27,
+      "mae": 3.46,
+      "rmse": 4.6,
+      "brier": 0.0928
+    },
+    {
+      "city": "AUS",
+      "variable": "temperature_2m_min",
+      "count": 2244,
+      "bias": 3.18,
+      "mae": 4.64,
+      "rmse": 5.78,
+      "brier": 0.1185
+    },
+    {
+      "city": "BOS",
+      "variable": "temperature_2m_max",
+      "count": 360,
+      "bias": -0.82,
+      "mae": 3.11,
+      "rmse": 4.05,
+      "brier": 0.0692
+    },
+    {
+      "city": "BOS",
+      "variable": "temperature_2m_min",
+      "count": 360,
+      "bias": 1.73,
+      "mae": 2.3,
+      "rmse": 3.31,
+      "brier": 0.0127
+    },
+    {
+      "city": "CHI",
+      "variable": "temperature_2m_max",
+      "count": 2316,
+      "bias": -1.11,
+      "mae": 5.09,
+      "rmse": 6.73,
+      "brier": 0.077
+    },
+    {
+      "city": "CHI",
+      "variable": "temperature_2m_min",
+      "count": 2316,
+      "bias": 4.24,
+      "mae": 4.99,
+      "rmse": 6.43,
+      "brier": 0.133
+    },
+    {
+      "city": "DEN",
+      "variable": "temperature_2m_max",
+      "count": 2244,
+      "bias": 1.79,
+      "mae": 5.19,
+      "rmse": 7.44,
+      "brier": 0.1079
+    },
+    {
+      "city": "DEN",
+      "variable": "temperature_2m_min",
+      "count": 2250,
+      "bias": 7.46,
+      "mae": 7.58,
+      "rmse": 8.47,
+      "brier": 0.1959
+    },
+    {
+      "city": "LAX",
+      "variable": "temperature_2m_max",
+      "count": 2334,
+      "bias": 0.65,
+      "mae": 3.22,
+      "rmse": 4.08,
+      "brier": 0.1788
+    },
+    {
+      "city": "LAX",
+      "variable": "temperature_2m_min",
+      "count": 2334,
+      "bias": 4.52,
+      "mae": 4.63,
+      "rmse": 5.56,
+      "brier": 0.1784
+    },
+    {
+      "city": "MIA",
+      "variable": "temperature_2m_max",
+      "count": 2112,
+      "bias": -3.99,
+      "mae": 4.08,
+      "rmse": 4.31,
+      "brier": 0.2392
+    },
+    {
+      "city": "MIA",
+      "variable": "temperature_2m_min",
+      "count": 2112,
+      "bias": 2.94,
+      "mae": 3.04,
+      "rmse": 3.6,
+      "brier": 0.2054
+    },
+    {
+      "city": "NYC",
+      "variable": "temperature_2m_max",
+      "count": 2112,
+      "bias": -1.24,
+      "mae": 3.67,
+      "rmse": 5.22,
+      "brier": 0.0778
+    },
+    {
+      "city": "NYC",
+      "variable": "temperature_2m_min",
+      "count": 2112,
+      "bias": 2.51,
+      "mae": 3.27,
+      "rmse": 4.45,
+      "brier": 0.096
+    },
+    {
+      "city": "PHIL",
+      "variable": "temperature_2m_max",
+      "count": 360,
+      "bias": -3.63,
+      "mae": 4.94,
+      "rmse": 5.39,
+      "brier": 0.1186
+    },
+    {
+      "city": "PHIL",
+      "variable": "temperature_2m_min",
+      "count": 360,
+      "bias": -1.94,
+      "mae": 2.25,
+      "rmse": 3.03,
+      "brier": 0.0866
+    },
+    {
+      "city": "SEA",
+      "variable": "temperature_2m_max",
+      "count": 2334,
+      "bias": 1.84,
+      "mae": 3.86,
+      "rmse": 5.93,
+      "brier": 0.1314
+    }
+  ],
+  "lead_time": [
+    {
+      "lead_days": 0,
+      "count": 3744,
+      "brier": 0.1371,
+      "rmse": 4.95,
+      "mean_spread": 1.38,
+      "spread_skill_ratio": 0.278
+    },
+    {
+      "lead_days": 1,
+      "count": 17706,
+      "brier": 0.1377,
+      "rmse": 5.21,
+      "mean_spread": 1.66,
+      "spread_skill_ratio": 0.319
+    },
+    {
+      "lead_days": 2,
+      "count": 9054,
+      "brier": 0.1373,
+      "rmse": 5.59,
+      "mean_spread": 2.02,
+      "spread_skill_ratio": 0.362
+    }
+  ],
+  "strike_type": [
+    {
+      "type": "between",
+      "count": 20336,
+      "brier": 0.1304,
+      "ece": 0.123,
+      "mean_predicted": 0.121,
+      "observed_freq": 0.116
+    },
+    {
+      "type": "greater",
+      "count": 5084,
+      "brier": 0.1878,
+      "ece": 0.1559,
+      "mean_predicted": 0.388,
+      "observed_freq": 0.311
+    },
+    {
+      "type": "less",
+      "count": 5084,
+      "brier": 0.1154,
+      "ece": 0.0895,
+      "mean_predicted": 0.152,
+      "observed_freq": 0.226
+    }
+  ],
+  "pit_histogram": [
+    {
+      "range": "0.0-0.1",
+      "observed": 340,
+      "expected": 82.4
+    },
+    {
+      "range": "0.1-0.2",
+      "observed": 51,
+      "expected": 82.4
+    },
+    {
+      "range": "0.2-0.3",
+      "observed": 39,
+      "expected": 82.4
+    },
+    {
+      "range": "0.3-0.4",
+      "observed": 15,
+      "expected": 82.4
+    },
+    {
+      "range": "0.4-0.5",
+      "observed": 32,
+      "expected": 82.4
+    },
+    {
+      "range": "0.5-0.6",
+      "observed": 38,
+      "expected": 82.4
+    },
+    {
+      "range": "0.6-0.7",
+      "observed": 29,
+      "expected": 82.4
+    },
+    {
+      "range": "0.7-0.8",
+      "observed": 19,
+      "expected": 82.4
+    },
+    {
+      "range": "0.8-0.9",
+      "observed": 38,
+      "expected": 82.4
+    },
+    {
+      "range": "0.9-1.0",
+      "observed": 223,
+      "expected": 82.4
+    }
+  ]
+}

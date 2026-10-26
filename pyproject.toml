@@ -1,0 +1,100 @@
+[project]
+name = "the-oracle"
+version = "0.1.0"
+description = "Prediction market trading bot for Kalshi"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    # Async HTTP/WebSocket
+    "aiohttp>=3.11",
+    # Async DNS (aiohttp AsyncResolver / c-ares) — keeps DNS off the default
+    # thread pool so a saturated executor can't stall the event loop (see
+    # _build_connector in python/data/kalshi_client.py).
+    "aiodns>=3.2",
+    # Cryptography (RSA-PSS signing for Kalshi auth)
+    "cryptography>=44.0",
+    # Data & analytics
+    "pandas>=2.2",
+    "numpy>=2.0",
+    "scipy>=1.14",
+    # Configuration & env
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    "pyyaml>=6.0",
+    # Terminal dashboard
+    "textual>=1.0",
+    "rich>=13.9",
+    # HTTP client (for data fetching)
+    "httpx>=0.28",
+    # Structured logging
+    "structlog>=24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+    "mypy>=1.14",
+    "hypothesis>=6.100",
+]
+telegram = [
+    "python-telegram-bot>=21.0",
+]
+ml = [
+    "scikit-learn>=1.6",
+    "scipy>=1.14",
+    # pandas parquet I/O engine (build_emos_corpus); never imported directly.
+    "pyarrow>=18.0",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# calibrator_harness.py pre-declares all future public symbols in __all__
+# (Tasks 3-19 implement them); F822 is expected on the skeleton.
+"python/analytics/calibrator_harness.py" = ["F822"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "slow: tests that run the full calibrator harness end-to-end; skipped by default in CI",
+]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["scipy.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["python.analytics.isotonic_fit"]
+disable_error_code = ["import-untyped"]
+
+[[tool.mypy.overrides]]
+module = ["pandas.*"]
+ignore_missing_imports = true
+
+# `scripts/` is an untyped sibling of the typed `python/` package; the
+# research scaffold (python/research/scaffold.py) imports a small set of
+# pure helpers from scripts._calibration_common per spec §2.1 hermetic
+# imports. Silence the cascading strict-mode errors from those untyped
+# script modules without weakening checks for python/.
+[[tool.mypy.overrides]]
+module = ["scripts.*"]
+ignore_errors = true

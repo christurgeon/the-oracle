@@ -1,0 +1,14 @@
+The Oracle
+Copyright 2026 christurgeon
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+The license covers the source code and the derived artifacts in this
+repository. It does not grant any rights in third-party data.
+
+Third-party data
+- Kalshi market data is not included. Kalshi's developer terms do not allow
+  redistributing data obtained from its API; collect your own under those terms.
+- Weather forecasts come from Open-Meteo (https://open-meteo.com/), licensed
+  CC BY 4.0. Open-Meteo's free API is for non-commercial use only.
+- Official temperature observations come from the U.S. National Weather Service
+  (public domain) and the Iowa Environmental Mesonet ASOS archive.

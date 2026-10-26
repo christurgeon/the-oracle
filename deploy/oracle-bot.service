@@ -1,0 +1,53 @@
+[Unit]
+Description=The Oracle — Kalshi Prediction Market Trading Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+
+# Pre-start: validate config before counting restarts.
+ExecStartPre=/opt/oracle/.venv/bin/python -c "from python.settings import Settings; Settings.load()"
+
+ExecStart=/opt/oracle/.venv/bin/python -m python.orchestrator
+
+# Timers
+WatchdogSec=120
+TimeoutStartSec=120
+TimeoutStopSec=60
+
+# Restart policy — exit 0 (kill switch) stays stopped; non-zero restarts.
+Restart=on-failure
+RestartSec=30
+StartLimitBurst=5
+StartLimitIntervalSec=300
+
+# Identity
+User=oracle
+Group=oracle
+WorkingDirectory=/opt/oracle
+EnvironmentFile=/opt/oracle/.env
+
+# Security hardening
+ProtectSystem=strict
+ReadWritePaths=/opt/oracle/state /opt/oracle/data /opt/oracle/.claude
+ReadOnlyPaths=/opt/oracle/keys
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Resource limits
+MemoryMax=2G
+LimitNOFILE=65536
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=oracle-bot
+
+[Install]
+WantedBy=multi-user.target

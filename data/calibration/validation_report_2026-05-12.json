@@ -1,0 +1,113 @@
+{
+  "pass": true,
+  "fail_reasons": [],
+  "advisory_warnings": [
+    "anchor_value_at_zero_above_threshold",
+    "new_high_range_broken_bin",
+    "n_pairs_growth_above_15pct"
+  ],
+  "candidate_path": "data/calibration/isotonic.json",
+  "baseline_path": "data/calibration/isotonic.2026-05-12.pre-bugfix-refit.json",
+  "refit_trigger": "752b6ed — scripts/calibrate.py 4-tuple→5-tuple forecast key fix; baseline trained on ~19.6%-ECMWF-contaminated corpus",
+  "refit_framing": "hygiene_refit",
+  "fit_date": "2026-05-12",
+  "input_pipeline": "production_mirrored",
+  "bias_correction_applied": true,
+  "ensemble_weights": {"gfs_seamless": 0.55, "ecmwf_ifs025": 0.45},
+  "n_pairs": 4020,
+  "n_pairs_baseline_2026_05_01": 3240,
+  "n_pairs_growth_pct": 24.07,
+  "n_pairs_growth_explanation": "8 new forecast dates (2026-05-02..2026-05-09) × ~78 unique pairs/date ≈ 624 new pairs; remaining ~156 from settlement maturation on existing dates (preliminary→final).",
+
+  "brier_raw": 0.124219,
+  "brier_calibrated": 0.100233,
+  "improvement_pct_full_corpus": 19.31,
+  "cv_folds": 5,
+  "cv_raw_brier_mean": 0.1242,
+  "cv_raw_brier_std": 0.0134,
+  "cv_calibrated_brier_mean": 0.1011,
+  "cv_calibrated_brier_std": 0.0100,
+  "cv_improvement_pct": 18.6,
+
+  "baseline_brier_calibrated_2026_05_01": 0.100569,
+  "candidate_vs_baseline_brier_delta": -0.000336,
+  "abort_threshold_used": "live + 2 * cv_calibrated_brier_std = 0.100569 + 0.0200 = 0.120569",
+  "tightening_rule_fired": false,
+  "tightening_rule_basis": "between strike type raw Brier 0.0905 < base rate 0.0959; between is not the regressor.",
+
+  "per_strike_type_raw_brier": {
+    "between": {"n": 2680, "raw_brier": 0.0905, "base_rate": 0.0959},
+    "greater": {"n": 670, "raw_brier": 0.2421, "base_rate": 0.1866},
+    "less":    {"n": 670, "raw_brier": 0.1412, "base_rate": 0.1328}
+  },
+
+  "max_calibrated_value": 0.513889,
+  "anchor_endpoints": true,
+  "anchor_weight": 20,
+  "values_at_raw_zero": 0.07967,
+  "values_at_raw_one":  0.513889,
+  "n_breakpoints": 22,
+
+  "block_raw_prob_range_new":  [0.649, 0.967],
+  "block_raw_prob_range_live": [0.649, 0.967],
+  "block_raw_prob_range_shift": [0.0, 0.0],
+  "plateau_script_exit_code": 0,
+  "plateau_at_block_range_value_new": 0.321678,
+  "plateau_at_block_range_value_live": 0.283333,
+
+  "input_contract_preflight": {
+    "calendar_first_seen_gfs_seamless": "2026-03-19",
+    "calendar_first_seen_ecmwf_ifs025": "2026-04-24",
+    "full_coverage": 206,
+    "partial_coverage": 0,
+    "empty_cells": 12,
+    "single_model_era": 468,
+    "exempt_pre_models": 48,
+    "allow_empty_cells_override": true,
+    "allow_empty_cells_reason": "BOS/PHIL out-of-scope for weather.cities config (python/config.yaml:19); Kalshi added KXHIGHPHIL/KXHIGHBOS markets and NWS station mapping exists, but the GFS/ECMWF forecaster does not generate forecasts for those cities. The 12 empty triples are (BOS, PHIL) × (2026-05-07, 2026-05-08, 2026-05-09) × (high, low). They never contribute to the training corpus because the join step requires forecasts; this is a benign data-collection-scope mismatch, not partial-tree corruption."
+  },
+
+  "emos_cell_isolation_7d": {
+    "cells": ["MIA/high", "NYC/low", "LAX/high", "LAX/low"],
+    "emos_cell_eval_rows": 221656,
+    "isotonic_fallback_rows": 0,
+    "isotonic_fallback_rate": 0.0,
+    "isotonic_fallback_threshold": 0.02,
+    "plateau_band_raw_ens_prob_hits_emos": 0,
+    "plateau_band_raw_ens_prob_hits_all": 1429
+  },
+
+  "advisory_findings": {
+    "anchor_value_at_zero": {
+      "value": 0.07967,
+      "threshold": 0.05,
+      "interpretation": "values[0] exceeds the §7.1 anchor-degeneracy threshold; corpus grew (n=4020 vs n=3240 baseline) so anchor_weight = n // 200 = 20 (vs 16 baseline), which is mechanistic and not a corpus-shape issue. Investigation action --no-anchor-endpoints comparison deferred."
+    },
+    "new_high_range_broken_bin": {
+      "bin": "[0.50, 0.60)",
+      "n": 52,
+      "mean_predicted": 0.514,
+      "observed_freq": 0.327,
+      "deviation_pp": 18.7,
+      "interpretation": "Historical broken bin [0.40, 0.50) (n=51, pred=0.478, obs=0.314) is empty post-cal (calibrator squashed those raw probs down to ~0.322). A new miscalibration emerges in [0.50, 0.60); does not match the configured gate row (which targeted [0.40, 0.50)). Watch in 24h post-deploy monitoring; not a refit blocker."
+    },
+    "n_pairs_growth_pct": {
+      "value": 24.07,
+      "investigate_band": "15-25%",
+      "interpretation": "+24% is borderline-INVESTIGATE per the §2 gate matrix. Decomposition shows the growth is benign data accumulation: 8 new forecast dates × ~78 unique pairs/date + ~156 from settlement maturation."
+    }
+  },
+
+  "files_touched": [
+    "data/calibration/isotonic.json (overwritten; backup at isotonic.2026-05-12.pre-bugfix-refit.json)",
+    "scripts/fit_isotonic.py (truncate-on-write fix for --write-pair-provenance)",
+    "scripts/fit_platt.py (truncate-on-write fix for --write-pair-provenance)",
+    "tests/test_fit_isotonic.py (regression test test_t3f1)",
+    "tests/test_fit_platt.py (regression test test_t4f1)",
+    "data/calibration/validation_report_2026-05-12.json (this file)"
+  ],
+
+  "config_changes": "none — new plateau bounds are identical to live [0.649, 0.967]; no python/config.yaml update needed.",
+
+  "strict_structural_checks": false
+}

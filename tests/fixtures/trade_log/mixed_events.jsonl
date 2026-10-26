@@ -1,0 +1,5 @@
+{"event": "placement", "order_id": "P-1", "market_ticker": "KXHIGHNY-26MAY10-B70.5", "timestamp": "2026-05-10T15:00:00+00:00", "side": "NO", "mode": "live", "metadata": {"strategy": "weather_edge"}}
+{"event": "fill", "order_id": "P-1", "market_ticker": "KXHIGHNY-26MAY10-B70.5", "timestamp": "2026-05-10T15:00:01+00:00", "side": "NO", "mode": "live", "fill_price": 0.65, "contracts": 12, "fees_from_api": 0.18, "metadata": {"strategy": "weather_edge"}}
+{"event": "fill", "order_id": "F-2", "market_ticker": "KXLOWTNYC-26MAY10-B58.5", "timestamp": "2026-05-10T15:30:00+00:00", "side": "NO", "mode": "live", "fill_price": 0.55, "contracts": 8, "fees_from_api": 0.12, "metadata": {"strategy": "weather_edge"}}
+{"event": "settlement", "order_id": "F-2", "market_ticker": "KXLOWTNYC-26MAY10-B58.5", "timestamp": "2026-05-11T05:00:00+00:00", "result": "no", "pnl": 3.20, "metadata": {"strategy": "weather_edge"}}
+{"event": "cancellation", "order_id": "C-3", "market_ticker": "KXHIGHCHI-26MAY10-B65.5", "timestamp": "2026-05-10T16:00:00+00:00", "side": "NO", "mode": "live", "metadata": {"strategy": "weather_edge"}}

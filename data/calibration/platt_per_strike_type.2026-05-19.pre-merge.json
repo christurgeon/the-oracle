@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "fit_date": "2026-04-20",
+  "spread_inflation": true,
+  "source_snapshots_dir": "data/snapshots",
+  "min_per_type": 300,
+  "n_pairs_total": 2496,
+  "per_type_warnings": [],
+  "per_type": {
+    "greater": {
+      "n": 416,
+      "a": -1.704399,
+      "b": 0.748816,
+      "brier_raw": 0.301661,
+      "brier_calibrated": 0.159382
+    },
+    "less": {
+      "n": 416,
+      "a": -1.975784,
+      "b": 0.276774,
+      "brier_raw": 0.155743,
+      "brier_calibrated": 0.111118
+    },
+    "between": {
+      "n": 1664,
+      "a": -2.376434,
+      "b": 1.761446,
+      "brier_raw": 0.089112,
+      "brier_calibrated": 0.084875
+    }
+  }
+}

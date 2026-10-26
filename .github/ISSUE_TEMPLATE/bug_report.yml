@@ -1,0 +1,66 @@
+name: Bug report
+description: Report a defect that you can reproduce on the latest main.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is a personal project with no support. The maintainer can close issues without a reply.
+
+        **Do not paste secrets.** This includes `.env` contents, API key IDs, private keys, Telegram tokens, Telegram chat IDs, balances, positions, and order IDs.
+
+        **Do not paste Kalshi market data.** This includes market lists, prices, orderbooks, trades, fills, settlements, and screenshots of them. Kalshi's terms do not allow redistribution.
+  - type: checkboxes
+    id: attestations
+    attributes:
+      label: Before you submit
+      options:
+        - label: This issue contains no secrets and no account details.
+          required: true
+        - label: This issue contains no Kalshi market data.
+          required: true
+        - label: I reproduced the problem on the latest main.
+          required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit
+      description: "The output of: git rev-parse --short HEAD"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Execution mode
+      options:
+        - shadow
+        - paper
+        - live
+        - not applicable (tests or scripts)
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened
+      description: Describe the problem. Say what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Give the exact commands. A failing test is the best reproduction.
+    validations:
+      required: true
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Error and traceback
+      description: "Paste only the error and the traceback. Remove prices, balances, order IDs, and local paths."
+      render: text
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: "Python version and operating system. Example: Python 3.13.1, Ubuntu 24.04."

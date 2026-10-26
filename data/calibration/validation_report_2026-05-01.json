@@ -1,0 +1,59 @@
+{
+  "pass": true,
+  "fail_reasons": [],
+  "advisory_warnings": [
+    "plateau_too_wide",
+    "output_range_capped"
+  ],
+  "candidate_path": "data/calibration/isotonic_v3.staging.json",
+  "baseline_path": "data/calibration/isotonic.json",
+  "n_train_pairs": 2160,
+  "n_holdout_pairs": 1080,
+  "n_unique_dates": 42,
+  "holdout_start": "2026-04-16",
+  "raw_holdout_brier": 0.11262,
+  "candidate_holdout_brier": 0.095149,
+  "baseline_holdout_brier": 0.094514,
+  "calibration_lift_vs_raw": 0.017471,
+  "candidate_vs_baseline_delta": 0.000635,
+  "plateau_violations": [
+    {
+      "lo": 0.0,
+      "hi": 0.109667,
+      "value": 0.08768,
+      "width": 0.109667
+    },
+    {
+      "lo": 0.109667,
+      "hi": 0.291,
+      "value": 0.139262,
+      "width": 0.18133299999999997
+    },
+    {
+      "lo": 0.291,
+      "hi": 0.366667,
+      "value": 0.153846,
+      "width": 0.07566700000000004
+    },
+    {
+      "lo": 0.371667,
+      "hi": 0.533333,
+      "value": 0.166667,
+      "width": 0.16166599999999992
+    },
+    {
+      "lo": 0.55,
+      "hi": 0.648667,
+      "value": 0.280702,
+      "width": 0.09866699999999995
+    },
+    {
+      "lo": 0.648667,
+      "hi": 1.0,
+      "value": 0.283333,
+      "width": 0.351333
+    }
+  ],
+  "max_calibrated_value": 0.477612,
+  "strict_structural_checks": false
+}

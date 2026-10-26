@@ -1,0 +1,435 @@
+{
+  "NYC": {
+    "high": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": -0.41,
+        "mae_f": 2.89,
+        "rmse_f": 4.04,
+        "std_bias_f": 4.02
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": -0.64,
+          "mae_f": 3.63,
+          "rmse_f": 4.58,
+          "std_bias_f": 4.54
+        },
+        "5": {
+          "count": 28,
+          "mean_bias_f": 0.37,
+          "mae_f": 2.0,
+          "rmse_f": 2.8,
+          "std_bias_f": 2.78
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": 2.73,
+        "mae_f": 3.21,
+        "rmse_f": 4.2,
+        "std_bias_f": 3.19
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 3.33,
+          "mae_f": 3.89,
+          "rmse_f": 5.08,
+          "std_bias_f": 3.84
+        },
+        "5": {
+          "count": 28,
+          "mean_bias_f": 2.27,
+          "mae_f": 2.68,
+          "rmse_f": 3.35,
+          "std_bias_f": 2.47
+        }
+      }
+    }
+  },
+  "CHI": {
+    "high": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": -1.29,
+        "mae_f": 4.13,
+        "rmse_f": 5.21,
+        "std_bias_f": 5.05
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": -0.11,
+          "mae_f": 4.63,
+          "rmse_f": 5.61,
+          "std_bias_f": 5.61
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": -1.66,
+          "mae_f": 3.65,
+          "rmse_f": 4.61,
+          "std_bias_f": 4.29
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": 3.58,
+        "mae_f": 4.22,
+        "rmse_f": 5.47,
+        "std_bias_f": 4.14
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 4.4,
+          "mae_f": 4.96,
+          "rmse_f": 5.87,
+          "std_bias_f": 3.88
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 2.74,
+          "mae_f": 3.46,
+          "rmse_f": 4.19,
+          "std_bias_f": 3.17
+        }
+      }
+    }
+  },
+  "MIA": {
+    "high": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": -3.86,
+        "mae_f": 3.93,
+        "rmse_f": 4.18,
+        "std_bias_f": 1.6
+      },
+      "by_month": {
+        "4": {
+          "count": 29,
+          "mean_bias_f": -4.05,
+          "mae_f": 4.05,
+          "rmse_f": 4.24,
+          "std_bias_f": 1.25
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": -3.72,
+          "mae_f": 3.9,
+          "rmse_f": 4.21,
+          "std_bias_f": 1.97
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": 2.79,
+        "mae_f": 2.85,
+        "rmse_f": 3.4,
+        "std_bias_f": 1.95
+      },
+      "by_month": {
+        "4": {
+          "count": 29,
+          "mean_bias_f": 1.85,
+          "mae_f": 1.99,
+          "rmse_f": 2.53,
+          "std_bias_f": 1.72
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 3.56,
+          "mae_f": 3.56,
+          "rmse_f": 3.97,
+          "std_bias_f": 1.77
+        }
+      }
+    }
+  },
+  "LAX": {
+    "high": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": 0.17,
+        "mae_f": 2.59,
+        "rmse_f": 3.29,
+        "std_bias_f": 3.29
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": -1.37,
+          "mae_f": 2.09,
+          "rmse_f": 2.66,
+          "std_bias_f": 2.28
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 0.3,
+          "mae_f": 2.48,
+          "rmse_f": 3.11,
+          "std_bias_f": 3.1
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": 3.28,
+        "mae_f": 3.48,
+        "rmse_f": 4.52,
+        "std_bias_f": 3.1
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 3.97,
+          "mae_f": 4.06,
+          "rmse_f": 4.83,
+          "std_bias_f": 2.75
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 2.27,
+          "mae_f": 2.62,
+          "rmse_f": 3.7,
+          "std_bias_f": 2.92
+        }
+      }
+    }
+  },
+  "DEN": {
+    "high": {
+      "overall": {
+        "count": 71,
+        "mean_bias_f": 2.51,
+        "mae_f": 4.71,
+        "rmse_f": 7.64,
+        "std_bias_f": 7.22
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 2.83,
+          "mae_f": 5.23,
+          "rmse_f": 8.07,
+          "std_bias_f": 7.55
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 1.46,
+          "mae_f": 3.47,
+          "rmse_f": 6.16,
+          "std_bias_f": 5.98
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 71,
+        "mean_bias_f": 5.99,
+        "mae_f": 6.14,
+        "rmse_f": 7.02,
+        "std_bias_f": 3.66
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 8.36,
+          "mae_f": 8.36,
+          "rmse_f": 8.92,
+          "std_bias_f": 3.12
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 3.82,
+          "mae_f": 4.07,
+          "rmse_f": 4.58,
+          "std_bias_f": 2.52
+        }
+      }
+    }
+  },
+  "AUS": {
+    "high": {
+      "overall": {
+        "count": 71,
+        "mean_bias_f": 1.73,
+        "mae_f": 3.49,
+        "rmse_f": 5.11,
+        "std_bias_f": 4.81
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 0.61,
+          "mae_f": 3.55,
+          "rmse_f": 4.54,
+          "std_bias_f": 4.5
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 3.03,
+          "mae_f": 3.6,
+          "rmse_f": 5.91,
+          "std_bias_f": 5.08
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 71,
+        "mean_bias_f": 2.81,
+        "mae_f": 3.9,
+        "rmse_f": 4.95,
+        "std_bias_f": 4.08
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 1.72,
+          "mae_f": 3.4,
+          "rmse_f": 4.55,
+          "std_bias_f": 4.22
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 4.31,
+          "mae_f": 4.8,
+          "rmse_f": 5.75,
+          "std_bias_f": 3.8
+        }
+      }
+    }
+  },
+  "SEA": {
+    "high": {
+      "overall": {
+        "count": 70,
+        "mean_bias_f": 2.92,
+        "mae_f": 4.35,
+        "rmse_f": 6.9,
+        "std_bias_f": 6.25
+      },
+      "by_month": {
+        "4": {
+          "count": 30,
+          "mean_bias_f": 1.76,
+          "mae_f": 3.77,
+          "rmse_f": 5.56,
+          "std_bias_f": 5.27
+        },
+        "5": {
+          "count": 29,
+          "mean_bias_f": 4.58,
+          "mae_f": 5.06,
+          "rmse_f": 8.36,
+          "std_bias_f": 6.99
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 37,
+        "mean_bias_f": -0.5,
+        "mae_f": 1.53,
+        "rmse_f": 1.91,
+        "std_bias_f": 1.85
+      },
+      "by_month": {
+        "5": {
+          "count": 29,
+          "mean_bias_f": -0.19,
+          "mae_f": 1.39,
+          "rmse_f": 1.85,
+          "std_bias_f": 1.84
+        }
+      }
+    }
+  },
+  "PHIL": {
+    "high": {
+      "overall": {
+        "count": 26,
+        "mean_bias_f": -3.77,
+        "mae_f": 4.36,
+        "rmse_f": 4.69,
+        "std_bias_f": 2.79
+      },
+      "by_month": {
+        "5": {
+          "count": 20,
+          "mean_bias_f": -3.41,
+          "mae_f": 4.17,
+          "rmse_f": 4.59,
+          "std_bias_f": 3.08
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 26,
+        "mean_bias_f": -2.03,
+        "mae_f": 2.63,
+        "rmse_f": 3.12,
+        "std_bias_f": 2.37
+      },
+      "by_month": {
+        "5": {
+          "count": 20,
+          "mean_bias_f": -1.47,
+          "mae_f": 2.25,
+          "rmse_f": 2.79,
+          "std_bias_f": 2.37
+        }
+      }
+    }
+  },
+  "BOS": {
+    "high": {
+      "overall": {
+        "count": 26,
+        "mean_bias_f": -0.69,
+        "mae_f": 3.25,
+        "rmse_f": 3.91,
+        "std_bias_f": 3.85
+      },
+      "by_month": {
+        "5": {
+          "count": 20,
+          "mean_bias_f": -0.37,
+          "mae_f": 3.61,
+          "rmse_f": 4.29,
+          "std_bias_f": 4.27
+        }
+      }
+    },
+    "low": {
+      "overall": {
+        "count": 26,
+        "mean_bias_f": 1.14,
+        "mae_f": 1.79,
+        "rmse_f": 2.27,
+        "std_bias_f": 1.97
+      },
+      "by_month": {
+        "5": {
+          "count": 20,
+          "mean_bias_f": 1.34,
+          "mae_f": 1.76,
+          "rmse_f": 2.27,
+          "std_bias_f": 1.83
+        }
+      }
+    }
+  }
+}

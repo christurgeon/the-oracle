@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-05-12T23:47:44.595130+00:00",
+  "method": "auto",
+  "models": {
+    "ecmwf_ifs025": {
+      "first_seen_date": "2026-04-24"
+    },
+    "gfs_seamless": {
+      "first_seen_date": "2026-03-19"
+    }
+  },
+  "schema_version": 1
+}

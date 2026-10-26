@@ -1,0 +1,53 @@
+{
+  "schema_version": 3,
+  "fit_date": "2026-05-01",
+  "input_pipeline": "production_mirrored",
+  "bias_correction_applied": true,
+  "ensemble_weights": {
+    "gfs_seamless": 0.55,
+    "ecmwf_ifs025": 0.45
+  },
+  "n_pairs": 3240,
+  "spread_inflation": true,
+  "anchor_endpoints": true,
+  "anchor_weight": 16,
+  "brier_raw": 0.128967,
+  "brier_calibrated": 0.100569,
+  "improvement_pct": 22.02,
+  "breakpoints": [
+    0.0,
+    0.109333,
+    0.109667,
+    0.283333,
+    0.291,
+    0.365333,
+    0.366667,
+    0.371667,
+    0.5,
+    0.533333,
+    0.549333,
+    0.55,
+    0.633333,
+    0.648667,
+    0.966667,
+    1.0
+  ],
+  "values": [
+    0.08768,
+    0.08768,
+    0.139262,
+    0.139262,
+    0.153846,
+    0.153846,
+    0.15625,
+    0.166667,
+    0.166667,
+    0.214286,
+    0.214286,
+    0.280702,
+    0.280702,
+    0.283333,
+    0.283333,
+    0.477612
+  ]
+}
