@@ -14,7 +14,7 @@ dependencies = [
     # _build_connector in python/data/kalshi_client.py).
     "aiodns>=3.2",
     # Cryptography (RSA-PSS signing for Kalshi auth)
-    "cryptography>=44.0",
+    "cryptography>=50.0.0",
     # Data & analytics
     "pandas>=2.2",
     "numpy>=2.0",
