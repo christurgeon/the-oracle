@@ -1,5 +1,7 @@
 # The Oracle
 
+[![CI](https://github.com/christurgeon/the-oracle/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/christurgeon/the-oracle/actions/workflows/ci.yml)
+
 Prediction market trading bot for [Kalshi](https://kalshi.com), a CFTC-regulated exchange. The strategy engine, execution, and analytics are written in Python.
 
 > **Risk notice.** This is a personal research and trading system, published for its
