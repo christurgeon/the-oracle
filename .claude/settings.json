@@ -3,5 +3,10 @@
     "allow": [
       "SendMessage"
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
   }
 }
